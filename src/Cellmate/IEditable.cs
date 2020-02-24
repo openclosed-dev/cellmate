@@ -21,6 +21,11 @@ namespace Cellmate
 {
     interface IEditable
     {
+        [Option('i', "inplace",
+            Default = false,
+            HelpText = "Enable inplace editing in the original file.")]
+        bool Inplace { get; set; }
+
         [Option("new-suffix",
             Default = ".new.xlsx",
             HelpText = "Filename suffix applied when files are saved.")]

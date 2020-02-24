@@ -16,19 +16,12 @@
  */
 #endregion
 using System;
-using System.Collections.Generic;
 using System.IO;
-using CommandLine;
 
 namespace Cellmate
 {
     abstract class Command 
     {
-        [Value(0, MetaName = "files",
-            HelpText = "Excel files to be processed.",
-            Required = true)]
-        public IEnumerable<string> Files { get; set; }
-
         public TextWriter Out { get; set; } = Console.Out;
 
         public TextWriter Error { get; set; } = Console.Error;

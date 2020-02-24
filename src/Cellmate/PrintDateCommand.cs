@@ -33,9 +33,6 @@ namespace Cellmate
         {
             var address = cell.Address[false, false];
             Out.WriteLine($"{book.Name}:{sheet.Name}:{address} {value}");
-
-            Out.WriteLine(cell.NumberFormat);
-            Out.WriteLine(cell.NumberFormatLocal);
         }
     }
 }

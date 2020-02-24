@@ -3,9 +3,12 @@
   <PropertyGroup>
     <Version>0.1.0</Version>
     <Copyright>Copyright 2020 the original author. All rights reserved.</Copyright>
-    <license>Apache-2.0</license>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <OutputType>Exe</OutputType>
     <TargetFramework>net47</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,4 +1,5 @@
 bin/
 obj/
 *.xlsx
+*.zip
 launch.json

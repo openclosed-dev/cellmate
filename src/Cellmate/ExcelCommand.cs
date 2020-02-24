@@ -16,6 +16,7 @@
  */
 #endregion
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Excel;
@@ -37,6 +38,11 @@ namespace Cellmate
             this.editable = this is IEditable;
         }
 
+        [Value(0, MetaName = "files",
+            HelpText = "Excel files to be processed.",
+            Required = true)]
+        public IEnumerable<string> Files { get; set; }
+
         [Option("visible", 
             Default = true,
             HelpText = "Visibility of the Excel window.")]
@@ -56,6 +62,8 @@ namespace Cellmate
 
         public string NewSuffix { get; set; }
 
+        public bool Inplace { get; set; }
+
         public bool IsEditable => editable;
 
         public override int Execute()
@@ -74,7 +82,7 @@ namespace Cellmate
                         ProcessBook(book);
                         if (IsEditable)
                         {
-                            SaveBookAs(book, GenerateNewPath(path));
+                            SaveBook(book, path);
                         }
                     }
                     finally
@@ -135,9 +143,19 @@ namespace Cellmate
             }
         }
 
-        void SaveBookAs(Workbook book, String path)
+        void SaveBook(Workbook book, String path)
         {
-            book.SaveAs(path);
+            if (Inplace)
+            {
+                if (!book.Saved)
+                {
+                    book.Save();
+                }
+            }
+            else
+            {
+                book.SaveAs(GenerateNewPath(path));
+            }
         }
 
         string GenerateNewPath(string path)
