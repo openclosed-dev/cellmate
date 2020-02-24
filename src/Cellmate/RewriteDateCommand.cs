@@ -22,14 +22,24 @@ using Microsoft.Office.Interop.Excel;
 namespace Cellmate
 {
     [Verb("rewrite-date", HelpText = "Rewrite dates")]
-    class RewriteDateCommand : DateCommand 
+    class RewriteDateCommand : DateCommand, IEditable
     {
-        [Option("date",
+        [Option("new-date",
+            Required = true,
             HelpText = "New value with which dates are replaced.")]
-        public DateTime Date { get; set; } 
-        protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
+        public DateTime NewDate { get; set; }
+
+        [Option("date-format",
+            Default = "m/d/yyyy",
+            HelpText = "Date format to assign")]
+        public string DateFormat { get; set; } 
+
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
-            Console.WriteLine("Hello World!");
+            cell.NumberFormat = this.DateFormat;
+            cell.Value = this.NewDate;
+            var address = cell.Address[false, false];
+            Out.WriteLine($"{book.Name}:{sheet.Name}:{address} {value} => {this.NewDate}");
         }
     }
 }

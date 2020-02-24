@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /*
  * Copyright 2020 the original author or authors.
  *
@@ -15,24 +15,15 @@
  * limitations under the License.
  */
 #endregion
-using System;
-using System.Collections.Generic;
-using System.IO;
 using CommandLine;
 
 namespace Cellmate
 {
-    abstract class Command 
+    interface IEditable
     {
-        [Value(0, MetaName = "files",
-            HelpText = "Excel files to be processed.",
-            Required = true)]
-        public IEnumerable<string> Files { get; set; }
-
-        public TextWriter Out { get; set; } = Console.Out;
-
-        public TextWriter Error { get; set; } = Console.Error;
-
-        public abstract int Execute();
-    }
+        [Option("new-suffix",
+            Default = ".new.xlsx",
+            HelpText = "Filename suffix applied when files are saved.")]
+        string NewSuffix { get; set; }
+   }
 }

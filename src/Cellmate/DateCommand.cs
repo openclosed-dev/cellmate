@@ -17,6 +17,7 @@
 #endregion
 using System;
 using CommandLine;
+using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
@@ -30,9 +31,33 @@ namespace Cellmate
             HelpText = "(Default: 9999-12-31) Ending date.")]
         public DateTime To { get; set; } = DateTime.MaxValue;
 
-        protected bool IsDateInRange(DateTime value)
+        protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
+        {
+            int rowCount = range.Rows.Count;
+            int columnCount = range.Columns.Count;
+            for (int i = 1; i <= rowCount; i++)
+            {
+                for (int j = 1; j <= columnCount; j++)
+                {
+                    var cell = range[i, j] as Range;
+                    DateTime? value = Values.AsDateTime(cell.Value);
+                    if (value.HasValue)
+                    {
+                        DateTime dateTime = value.Value;
+                        if (IsDateInRange(dateTime))
+                        {
+                            ProcessDate(book, sheet, cell, dateTime);
+                        }
+                    } 
+                }
+            }
+        } 
+
+        bool IsDateInRange(DateTime value)
         {
             return From <= value && value <= To;
         }
+
+        protected abstract void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value);
     }
 }

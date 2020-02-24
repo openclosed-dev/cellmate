@@ -25,45 +25,62 @@ namespace Cellmate
 {
     abstract class ExcelCommand : Command
     {
-        [Option("visible", 
-            Default = true,
-            HelpText = "Visibility of the Excel window.")]
-        public bool? Visible { get; set; }
-
         private static readonly Regex RangeRegex = new Regex(
             @"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private string range;
+        private readonly bool editable;
 
-        [Option("range", HelpText = "Range of cells to be processed, e.g. \"A1:Z99\"")]
+        protected ExcelCommand()
+        {
+            this.editable = this is IEditable;
+        }
+
+        [Option("visible", 
+            Default = true,
+            HelpText = "Visibility of the Excel window.")]
+        public bool? Visible { get; set; }
+
+        [Option("range", 
+            HelpText = "Range of cells to be processed, e.g. \"A1:Z99\"")]
         public string Range 
         { 
             get { return range; } 
             set
             {
-                if (RangeRegex.IsMatch(value))
-                {
-                    this.range = value;
-                }
-                else
-                {
-                    throw new ArgumentException();
-                }
+                ValidateRange(value);
+                this.range = value;
             } 
         }
+
+        public string NewSuffix { get; set; }
+
+        public bool IsEditable => editable;
 
         public override int Execute()
         {
             var excel = new Application();
             excel.Visible = Visible.Value;
+            excel.DisplayAlerts = false;
             try
             {
                 foreach (var file in Files)
                 {
-                    Workbook book = excel.Workbooks.Open(Path.GetFullPath(file));
-                    ProcessBook(book);
-                    book.Close();
+                    var path = Path.GetFullPath(file);
+                    Workbook book = excel.Workbooks.Open(path);
+                    try
+                    {
+                        ProcessBook(book);
+                        if (IsEditable)
+                        {
+                            SaveBookAs(book, GenerateNewPath(path));
+                        }
+                    }
+                    finally
+                    {
+                        book.Close();
+                    }
                 }
                 return 0;
             }
@@ -93,6 +110,18 @@ namespace Cellmate
 
         protected abstract void ProcessRange(Workbook book, Worksheet sheet, Range range);
 
+        void ValidateRange(string value)
+        {
+            if (RangeRegex.IsMatch(value))
+            {
+                this.range = value;
+            }
+            else
+            {
+                throw new ArgumentException();
+            }
+        }
+
         Range CalculateRange(Worksheet sheet)
         {
             Range usedRange = sheet.UsedRange;
@@ -104,6 +133,16 @@ namespace Cellmate
             {
                 return usedRange;
             }
+        }
+
+        void SaveBookAs(Workbook book, String path)
+        {
+            book.SaveAs(path);
+        }
+
+        string GenerateNewPath(string path)
+        {
+            return Path.ChangeExtension(path, this.NewSuffix);
         }
     }
 }

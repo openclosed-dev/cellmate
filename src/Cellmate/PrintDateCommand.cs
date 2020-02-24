@@ -24,33 +24,18 @@ namespace Cellmate
     [Verb("print-date", HelpText = "Print dates")]
     class PrintDateCommand : DateCommand 
     {
-        protected override void ProcessRange(Workbook book, Worksheet sheet, Range range) 
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
-            int rowCount = range.Rows.Count;
-            int columnCount = range.Columns.Count;
-            for (int i = 1; i <= rowCount; i++)
-            {
-                for (int j = 1; j <= columnCount; j++)
-                {
-                    var cell = range[i, j] as Range;
-                    DateTime? value = Values.AsDateTime(cell.Value);
-                    if (value.HasValue)
-                    {
-                        DateTime dateTime = value.Value;
-                        if (IsDateInRange(dateTime))
-                        {
-                            PrintDate(book, sheet, cell, dateTime);
-                        }
-                    } 
-                }
-            }
+            PrintDate(book, sheet, cell, value);
         }
 
         void PrintDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
             var address = cell.Address[false, false];
-            var line = $"{book.Name}:{sheet.Name}:{address} {value.ToString()}";
-            Out.WriteLine(line);
+            Out.WriteLine($"{book.Name}:{sheet.Name}:{address} {value}");
+
+            Out.WriteLine(cell.NumberFormat);
+            Out.WriteLine(cell.NumberFormatLocal);
         }
     }
 }
