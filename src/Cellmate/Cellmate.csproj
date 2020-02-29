@@ -7,7 +7,6 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <OutputType>Exe</OutputType>
     <TargetFramework>net47</TargetFramework>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
 
