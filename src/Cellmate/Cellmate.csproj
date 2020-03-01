@@ -10,6 +10,10 @@
     <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DebugType>None</DebugType>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
