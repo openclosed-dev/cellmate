@@ -16,19 +16,27 @@
  */
 #endregion
 using System;
-using CommandLine;
+using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets
 {
-    abstract class DateCommand : ExcelCommand
+    [Cmdlet(VerbsData.Update, "DateCell"),
+     OutputType(typeof(Workbook))]
+    public class UpdateDateCellCmdlet : DateCellCmdlet
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
+        [Parameter(Mandatory = true)]
+        public DateTime Value { get; set; }
 
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        [Parameter()]
+        public string Format { get; set; } = "m/d/yyyy";
+
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
+        {
+            cell.NumberFormat = this.Format;
+            cell.Value = this.Value;
+            var address = cell.Address[false, false];
+            WriteVerbose($"{book.Name}:{sheet.Name}:{address} {value} => {this.Value}");
+        }
     }
 }

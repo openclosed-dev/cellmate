@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /*
  * Copyright 2020 the original author or authors.
  *
@@ -16,19 +16,23 @@
  */
 #endregion
 using System;
-using CommandLine;
+using System.IO;
+using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets
 {
-    abstract class DateCommand : ExcelCommand
+    [Cmdlet(VerbsDiagnostic.Test, "DateCell"),
+     OutputType(typeof(Workbook))]
+    public class TestDateCellCmdlet : DateCellCmdlet
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
+        [Parameter()]
+        public TextWriter Output { get; set; } = Console.Out;
 
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
+        {
+            var address = cell.Address[false, false];
+            Output.WriteLine($"{book.Name}:{sheet.Name}:{address} {value}");
+        }
     }
 }

@@ -16,19 +16,23 @@
  */
 #endregion
 using System;
-using CommandLine;
-using Microsoft.Office.Interop.Excel;
+using System.IO;
+using System.Management.Automation;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets.Test
 {
-    abstract class DateCommand : ExcelCommand
+    class ScriptExecutor
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
-
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        public static void Execute(string path)
+        {
+            string script = File.ReadAllText(path);
+            using (PowerShell ps = PowerShell.Create())
+            {
+                ps.AddScript(script);
+                foreach (var result in ps.Invoke()) {
+                    Console.WriteLine(result);
+                }
+            }
+        }
     }
 }

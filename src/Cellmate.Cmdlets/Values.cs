@@ -16,19 +16,26 @@
  */
 #endregion
 using System;
-using CommandLine;
-using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets
 {
-    abstract class DateCommand : ExcelCommand
+    class Values
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
-
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        public static DateTime? AsDateTime(object value)
+        {
+            if (value is DateTime dateTime)
+            {
+                return dateTime;
+            }
+            else if (value is string s)
+            {
+                DateTime parsed;
+                if (DateTime.TryParse(s, out parsed))
+                {
+                    return parsed;
+                }
+            }
+            return null;
+        }
     }
 }

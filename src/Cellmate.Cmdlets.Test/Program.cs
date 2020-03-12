@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /*
  * Copyright 2020 the original author or authors.
  *
@@ -15,20 +15,14 @@
  * limitations under the License.
  */
 #endregion
-using System;
-using CommandLine;
-using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets.Test
 {
-    abstract class DateCommand : ExcelCommand
+    class Program
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
-
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        static void Main(string[] args)
+        {
+            ScriptExecutor.Execute("Test-DateCell.ps1");
+        }
     }
 }

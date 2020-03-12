@@ -16,8 +16,9 @@
  */
 #endregion
 using System;
+using System.Management.Automation;
 using CommandLine;
-using Microsoft.Office.Interop.Excel;
+using Cellmate.Cmdlets;
 
 namespace Cellmate
 {
@@ -34,12 +35,14 @@ namespace Cellmate
             HelpText = "Date format to assign")]
         public string DateFormat { get; set; } 
 
-        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
+        protected override void AddCmdletsTo(PowerShell pipeline)
         {
-            cell.NumberFormat = this.DateFormat;
-            cell.Value = this.NewDate;
-            var address = cell.Address[false, false];
-            Out.WriteLine($"{book.Name}:{sheet.Name}:{address} {value} => {this.NewDate}");
+            pipeline.AddCommand(new CmdletInfo("Update-DateCell", typeof(UpdateDateCellCmdlet)))
+                .AddParameter("Value", NewDate);
+            if (DateFormat != null)
+            {
+                pipeline.AddParameter("Format", DateFormat);
+            }
         }
     }
 }

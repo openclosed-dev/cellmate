@@ -15,20 +15,26 @@
  * limitations under the License.
  */
 #endregion
-using System;
-using CommandLine;
+using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets
 {
-    abstract class DateCommand : ExcelCommand
+    public abstract class SheetRangeCmdlet : SheetCmdlet
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
+        [Parameter()]
+        public string[] Range { get; set; }
 
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        protected override void ProcessSheet(Workbook book, Worksheet sheet)
+        {
+            ProcessRange(book, sheet, CalculateRange(sheet));
+        }
+
+        protected abstract void ProcessRange(Workbook book, Worksheet sheet, Range range);
+
+        Range CalculateRange(Worksheet sheet)
+        {
+            return sheet.UsedRange;
+        }
     }
 }

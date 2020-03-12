@@ -15,20 +15,21 @@
  * limitations under the License.
  */
 #endregion
-using System;
-using CommandLine;
+using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate
+namespace Cellmate.Cmdlets
 {
-    abstract class DateCommand : ExcelCommand
+    public abstract class SheetCmdlet : BookCmdlet
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
+        protected override void ProcessBook(Workbook book)
+        {
+            foreach (Worksheet sheet in book.Worksheets)
+            {
+                ProcessSheet(book, sheet);
+            }
+        }
 
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        protected abstract void ProcessSheet(Workbook book, Worksheet sheet);
     }
 }

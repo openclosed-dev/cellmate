@@ -17,10 +17,12 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Management.Automation;
 using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Office.Interop.Excel;
 using CommandLine;
+using Cellmate.Cmdlets;
 
 namespace Cellmate 
 {
@@ -68,55 +70,40 @@ namespace Cellmate
 
         public override int Execute()
         {
-            var excel = new Application();
-            excel.Visible = Visible.Value;
-            excel.DisplayAlerts = false;
-            try
+            using (var ps = BuildPipeline())
             {
-                foreach (var file in Files)
-                {
-                    var path = Path.GetFullPath(file);
-                    Workbook book = excel.Workbooks.Open(path);
-                    try
-                    {
-                        ProcessBook(book);
-                        if (IsEditable)
-                        {
-                            SaveBook(book, path);
-                        }
-                    }
-                    finally
-                    {
-                        book.Close();
-                    }
-                }
-                return 0;
+                ps.Invoke<Workbook>(Files);
             }
-            catch (Exception e)
-            {
-                Error.WriteLine(e.Message);
-                return 1;
-            }
-            finally
-            {
-                excel.Quit();
-            }
+            return 0;
         }
 
-        protected virtual void ProcessBook(Workbook book)
+        protected PowerShell BuildPipeline()
         {
-            foreach (Worksheet sheet in book.Worksheets)
+            PowerShell ps = PowerShell.Create();
+
+            ps.AddCommand("Get-Item");
+            ps.AddCommand(new CmdletInfo("Import-Excel", typeof(ImportExcelCmdlet)));
+
+            AddCmdletsTo(ps);
+            
+            if (IsEditable)
             {
-                ProcessSheet(book, sheet);
+                AddExportExcelCmdlet(ps);
+            }
+            
+            return ps;
+        }
+
+        protected abstract void AddCmdletsTo(PowerShell pipeline);
+
+        protected void AddExportExcelCmdlet(PowerShell pipeline)
+        {
+            pipeline.AddCommand(new CmdletInfo("Export-Excel", typeof(ExportExcelCmdlet)));
+            if (!Inplace)
+            {
+                pipeline.AddParameter("Suffix", NewSuffix);
             }
         }
-
-        protected virtual void ProcessSheet(Workbook book, Worksheet sheet)
-        {
-            ProcessRange(book, sheet, CalculateRange(sheet));
-        }
-
-        protected abstract void ProcessRange(Workbook book, Worksheet sheet, Range range);
 
         void ValidateRange(string value)
         {
@@ -128,39 +115,6 @@ namespace Cellmate
             {
                 throw new ArgumentException();
             }
-        }
-
-        Range CalculateRange(Worksheet sheet)
-        {
-            Range usedRange = sheet.UsedRange;
-            if (this.Range != null) 
-            {
-                return sheet.Application.Intersect(usedRange, sheet.Range[this.Range]);
-            }
-            else
-            {
-                return usedRange;
-            }
-        }
-
-        void SaveBook(Workbook book, String path)
-        {
-            if (Inplace)
-            {
-                if (!book.Saved)
-                {
-                    book.Save();
-                }
-            }
-            else
-            {
-                book.SaveAs(GenerateNewPath(path));
-            }
-        }
-
-        string GenerateNewPath(string path)
-        {
-            return Path.ChangeExtension(path, this.NewSuffix);
         }
     }
 }

@@ -16,23 +16,20 @@
  */
 #endregion
 using System;
+using System.Management.Automation;
 using CommandLine;
 using Microsoft.Office.Interop.Excel;
+using Cellmate.Cmdlets;
 
 namespace Cellmate
 {
     [Verb("print-date", HelpText = "Print dates")]
     class PrintDateCommand : DateCommand 
     {
-        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
+        protected override void AddCmdletsTo(PowerShell pipeline)
         {
-            PrintDate(book, sheet, cell, value);
-        }
-
-        void PrintDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
-        {
-            var address = cell.Address[false, false];
-            Out.WriteLine($"{book.Name}:{sheet.Name}:{address} {value}");
+            pipeline.AddCommand(new CmdletInfo("Test-DateCell", typeof(TestDateCellCmdlet)))
+              .AddParameter("Output", Out);
         }
     }
 }
