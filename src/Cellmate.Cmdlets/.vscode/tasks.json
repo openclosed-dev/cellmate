@@ -16,7 +16,8 @@
             ],
             "group": "build",
             "presentation": {
-                "reveal": "silent"
+                "reveal": "silent",
+                "revealProblems": "onProblem"
             },
             "problemMatcher": "$msCompile"
         }

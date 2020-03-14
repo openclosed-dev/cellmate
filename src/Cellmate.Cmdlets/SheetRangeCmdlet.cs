@@ -23,6 +23,7 @@ namespace Cellmate.Cmdlets
     public abstract class SheetRangeCmdlet : SheetCmdlet
     {
         [Parameter()]
+        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$")]
         public string[] Range { get; set; }
 
         protected override void ProcessSheet(Workbook book, Worksheet sheet)

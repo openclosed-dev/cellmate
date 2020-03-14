@@ -15,34 +15,48 @@
  * limitations under the License.
  */
 #endregion
+using System;
 using System.IO;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    [Cmdlet(VerbsData.Export, "Excel"),
+    [Cmdlet(VerbsData.ConvertFrom, "Excel"),
      OutputType(typeof(Workbook))]
-    public class ExportExcelCmdlet : BookCmdlet
+    public class ConvertFromExcelCmdlet : BookCmdlet
     {
         [Parameter()]
         public string Suffix { get; set; }
         
+        [Parameter(Mandatory = true)]
+        [ValidateSet("pdf", "xps", IgnoreCase = true)]
+        public string Format { get; set; }
+
         protected override void ProcessBook(Workbook book)
         {
-            SaveBook(book);
+            ExportBookAsFixedFormat(book, Format);
         }
 
-        void SaveBook(Workbook book)
+        void ExportBookAsFixedFormat(Workbook book, string format)
         {
-            if (Suffix != null)
+            switch (format.ToLower())
             {
-                book.SaveAs(Path.ChangeExtension(book.FullName, Suffix));
+                case "pdf":
+                    ExportBookAs(book, XlFixedFormatType.xlTypePDF, ".pdf"); 
+                    break;
+                case "xps":
+                    ExportBookAs(book, XlFixedFormatType.xlTypeXPS, ".xps"); 
+                    break;
+                default:
+                    throw new InvalidOperationException();
             }
-            else
-            {
-                book.Save();
-            }
+        }
+
+        void ExportBookAs(Workbook book, XlFixedFormatType format, string suffix)
+        {
+            var filename = Path.ChangeExtension(book.FullName, suffix);
+            book.ExportAsFixedFormat(format, filename);
         }
     }
 }
