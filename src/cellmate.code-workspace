@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "Cellmate.Cmdlets"
+		},
+		{
+			"path": "Cellmate.Cmdlets.Test"
+		},
+		{
+			"path": "Cellmate"
+		}
+	],
+	"settings": {}
+}

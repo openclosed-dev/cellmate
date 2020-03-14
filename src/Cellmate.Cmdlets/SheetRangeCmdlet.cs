@@ -27,14 +27,29 @@ namespace Cellmate.Cmdlets
 
         protected override void ProcessSheet(Workbook book, Worksheet sheet)
         {
-            ProcessRange(book, sheet, CalculateRange(sheet));
+            string[] ranges = Range;
+            Range usedRange = sheet.UsedRange;
+            if (ranges == null)
+            {
+                ProcessRange(book, sheet, usedRange);
+            }
+            else
+            {
+                foreach(var range in ranges)
+                {
+                    var intersected = sheet.Application.Intersect(usedRange, sheet.Range[range]);
+                    ProcessRange(book, sheet, intersected);
+                }
+            }
         }
 
         protected abstract void ProcessRange(Workbook book, Worksheet sheet, Range range);
 
         Range CalculateRange(Worksheet sheet)
         {
-            return sheet.UsedRange;
+            if (Range == null || Range.Length == 0)
+            {}
+                return sheet.UsedRange;
         }
     }
 }

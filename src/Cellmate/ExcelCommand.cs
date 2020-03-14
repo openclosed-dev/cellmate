@@ -31,7 +31,7 @@ namespace Cellmate
             @"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$",
             RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
-        private string range;
+        private string[] range;
         private readonly bool editable;
 
         protected ExcelCommand()
@@ -52,11 +52,17 @@ namespace Cellmate
             HelpText = "Range of cells to be processed, e.g. \"A1:Z99\"")]
         public string Range 
         { 
-            get { return range; } 
+            get {
+                if (range == null || range.Length == 0)
+                {
+                    return null;
+                } 
+                return range[0]; 
+            } 
             set
             {
                 ValidateRange(value);
-                this.range = value;
+                this.range = new string[] { value };
             } 
         }
 
@@ -109,11 +115,7 @@ namespace Cellmate
 
         void ValidateRange(string value)
         {
-            if (RangeRegex.IsMatch(value))
-            {
-                this.range = value;
-            }
-            else
+            if (!RangeRegex.IsMatch(value))
             {
                 throw new ArgumentException();
             }

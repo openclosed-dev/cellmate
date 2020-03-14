@@ -15,10 +15,8 @@
  * limitations under the License.
  */
 #endregion
-using System;
 using System.Management.Automation;
 using CommandLine;
-using Microsoft.Office.Interop.Excel;
 using Cellmate.Cmdlets;
 
 namespace Cellmate
@@ -29,6 +27,7 @@ namespace Cellmate
         protected override void AddCmdletsTo(PowerShell pipeline)
         {
             pipeline.AddCommand(new CmdletInfo("Test-DateCell", typeof(TestDateCellCmdlet)))
+                .AddParameter("Range", Range)
                 .AddParameter("Before", Before)
                 .AddParameter("After", After);
         }

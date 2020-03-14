@@ -39,6 +39,7 @@ namespace Cellmate
         {
             pipeline.AddCommand(new CmdletInfo("Edit-DateCell", typeof(EditDateCellCmdlet)))
                 .AddParameter("Verbose")
+                .AddParameter("Range", Range)
                 .AddParameter("Before", Before)
                 .AddParameter("After", After)
                 .AddParameter("Value", NewDate);
