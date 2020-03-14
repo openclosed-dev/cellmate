@@ -23,16 +23,35 @@ namespace Cellmate.Cmdlets.Test
 {
     class ScriptExecutor
     {
-        public static void Execute(string path)
+        public static int Execute(string path)
         {
             string script = File.ReadAllText(path);
-            using (PowerShell ps = PowerShell.Create())
+            using (PowerShell ps = CreatePowerShell())
             {
                 ps.AddScript(script);
-                foreach (var result in ps.Invoke()) {
-                    Console.WriteLine(result);
-                }
+                ps.Invoke();
+                return ps.HadErrors ? 1 : 0;
             }
+        }
+
+        static PowerShell CreatePowerShell()
+        {
+            PowerShell powerShell = PowerShell.Create();
+            powerShell.Streams.Verbose.DataAdded += OutputVerbose;
+            powerShell.Streams.Warning.DataAdded += OutputWarning;
+            return powerShell;
+        }
+
+        static void OutputVerbose(object sender, DataAddedEventArgs e)
+        {
+            var record = (sender as PSDataCollection<VerboseRecord>) [e.Index];
+            Console.WriteLine($"[VERBOSE] {record.Message}");
+        }
+
+        static void OutputWarning(object sender, DataAddedEventArgs e)
+        {
+            var record = (sender as PSDataCollection<WarningRecord>) [e.Index];
+            Console.WriteLine($"[WARN] {record.Message}");
         }
     }
 }

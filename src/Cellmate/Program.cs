@@ -24,11 +24,11 @@ namespace Cellmate
         static int Main(string[] args)
         {
             return Parser.Default.ParseArguments<
-                RewriteDateCommand, 
-                PrintDateCommand>(args)
+                EditDateCommand, 
+                TestDateCommand>(args)
                 .MapResult(
-                    (RewriteDateCommand cmd) => cmd.Execute(),
-                    (PrintDateCommand cmd) => cmd.Execute(),
+                    (EditDateCommand cmd) => cmd.Execute(),
+                    (TestDateCommand cmd) => cmd.Execute(),
                     errs => 1
                 );
         }

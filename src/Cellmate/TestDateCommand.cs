@@ -23,13 +23,14 @@ using Cellmate.Cmdlets;
 
 namespace Cellmate
 {
-    [Verb("print-date", HelpText = "Print dates")]
-    class PrintDateCommand : DateCommand 
+    [Verb("test-date", HelpText = "Test date cells")]
+    class TestDateCommand : DateCommand 
     {
         protected override void AddCmdletsTo(PowerShell pipeline)
         {
             pipeline.AddCommand(new CmdletInfo("Test-DateCell", typeof(TestDateCellCmdlet)))
-              .AddParameter("Output", Out);
+                .AddParameter("Before", Before)
+                .AddParameter("After", After);
         }
     }
 }

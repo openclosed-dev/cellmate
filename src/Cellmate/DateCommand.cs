@@ -23,12 +23,12 @@ namespace Cellmate
 {
     abstract class DateCommand : ExcelCommand
     {
-        [Option("from", 
-            HelpText = "(Default: 0001-01-01) Starting date.")]
-        public DateTime From { get; set; } = DateTime.MinValue;
+        [Option("after", 
+            HelpText = "(Default: 0001-01-01) Lower bound of the period (exclusive).")]
+        public DateTime After { get; set; } = DateTime.MinValue;
 
-        [Option("to", 
-            HelpText = "(Default: 9999-12-31) Ending date.")]
-        public DateTime To { get; set; } = DateTime.MaxValue;
+        [Option("before", 
+            HelpText = "(Default: 9999-12-31) Upper bound of the period (exclusive).")]
+        public DateTime Before { get; set; } = DateTime.MaxValue;
     }
 }

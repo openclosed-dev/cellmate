@@ -20,9 +20,9 @@ namespace Cellmate.Cmdlets.Test
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            ScriptExecutor.Execute("Test-DateCell.ps1");
+            return ScriptExecutor.Execute("Edit-DateCell.ps1");
         }
     }
 }

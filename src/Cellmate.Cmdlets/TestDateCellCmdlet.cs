@@ -26,13 +26,10 @@ namespace Cellmate.Cmdlets
      OutputType(typeof(Workbook))]
     public class TestDateCellCmdlet : DateCellCmdlet
     {
-        [Parameter()]
-        public TextWriter Output { get; set; } = Console.Out;
-
         protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
             var address = cell.Address[false, false];
-            Output.WriteLine($"{book.Name}:{sheet.Name}:{address} {value}");
+            WriteWarning($"{book.Name}:{sheet.Name}:{address} {value}");
         }
     }
 }

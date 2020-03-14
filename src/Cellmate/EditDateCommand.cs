@@ -22,23 +22,27 @@ using Cellmate.Cmdlets;
 
 namespace Cellmate
 {
-    [Verb("rewrite-date", HelpText = "Rewrite dates")]
-    class RewriteDateCommand : DateCommand, IEditable
+    [Verb("edit-date", HelpText = "Edit date cells")]
+    class EditDateCommand : DateCommand, IEditable
     {
-        [Option("new-date",
+        [Option("value",
             Required = true,
             HelpText = "New value with which dates are replaced.")]
         public DateTime NewDate { get; set; }
 
-        [Option("date-format",
+        [Option("format",
             Default = "m/d/yyyy",
             HelpText = "Date format to assign")]
         public string DateFormat { get; set; } 
 
         protected override void AddCmdletsTo(PowerShell pipeline)
         {
-            pipeline.AddCommand(new CmdletInfo("Update-DateCell", typeof(UpdateDateCellCmdlet)))
+            pipeline.AddCommand(new CmdletInfo("Edit-DateCell", typeof(EditDateCellCmdlet)))
+                .AddParameter("Verbose")
+                .AddParameter("Before", Before)
+                .AddParameter("After", After)
                 .AddParameter("Value", NewDate);
+            
             if (DateFormat != null)
             {
                 pipeline.AddParameter("Format", DateFormat);

@@ -16,6 +16,9 @@
 
   <ItemGroup>
     <ProjectReference Include="../Cellmate.Cmdlets/Cellmate.Cmdlets.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.7.82" />
     <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
   </ItemGroup>

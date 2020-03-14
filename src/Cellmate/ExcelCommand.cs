@@ -20,7 +20,6 @@ using System.Collections.Generic;
 using System.Management.Automation;
 using System.IO;
 using System.Text.RegularExpressions;
-using Microsoft.Office.Interop.Excel;
 using CommandLine;
 using Cellmate.Cmdlets;
 
@@ -46,9 +45,8 @@ namespace Cellmate
         public IEnumerable<string> Files { get; set; }
 
         [Option("visible", 
-            Default = true,
             HelpText = "Visibility of the Excel window.")]
-        public bool? Visible { get; set; }
+        public bool Visible { get; set; }
 
         [Option("range", 
             HelpText = "Range of cells to be processed, e.g. \"A1:Z99\"")]
@@ -70,11 +68,11 @@ namespace Cellmate
 
         public override int Execute()
         {
-            using (var ps = BuildPipeline())
+            using (var powerShell = BuildPipeline())
             {
-                ps.Invoke<Workbook>(Files);
+                var executor = new PowerShellExecutor(this.Out, this.Error);
+                return executor.Execute(powerShell, Files);
             }
-            return 0;
         }
 
         protected PowerShell BuildPipeline()
@@ -83,6 +81,10 @@ namespace Cellmate
 
             ps.AddCommand("Get-Item");
             ps.AddCommand(new CmdletInfo("Import-Excel", typeof(ImportExcelCmdlet)));
+            if (Visible)
+            {
+                ps.AddParameter("Visible");
+            }
 
             AddCmdletsTo(ps);
             

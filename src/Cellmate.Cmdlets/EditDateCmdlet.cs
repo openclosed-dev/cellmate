@@ -21,9 +21,9 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    [Cmdlet(VerbsData.Update, "DateCell"),
+    [Cmdlet(VerbsData.Edit, "DateCell"),
      OutputType(typeof(Workbook))]
-    public class UpdateDateCellCmdlet : DateCellCmdlet
+    public class EditDateCellCmdlet : DateCellCmdlet
     {
         [Parameter(Mandatory = true)]
         public DateTime Value { get; set; }
