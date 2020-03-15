@@ -37,9 +37,16 @@ namespace Cellmate.Cmdlets.Test
         static PowerShell CreatePowerShell()
         {
             PowerShell powerShell = PowerShell.Create();
+            powerShell.Streams.Information.DataAdded += OutputInformation;
             powerShell.Streams.Verbose.DataAdded += OutputVerbose;
             powerShell.Streams.Warning.DataAdded += OutputWarning;
             return powerShell;
+        }
+
+        static void OutputInformation(object sender, DataAddedEventArgs e)
+        {
+            var record = (sender as PSDataCollection<InformationRecord>) [e.Index];
+            Console.WriteLine($"[INFO] {record.MessageData}");
         }
 
         static void OutputVerbose(object sender, DataAddedEventArgs e)

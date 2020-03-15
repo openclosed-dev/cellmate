@@ -1,9 +1,12 @@
 Import-Module .\bin\Debug\net47\Cellmate.Cmdlets.dll
 $books = @(
-    "sample1.xlsx",
-    "sample2.xlsx"
+    "spec1.xlsx",
+    "spec2.xlsx"
 )
 
+$pdf = $pwd.Path + "\merged.pdf"
+
 Get-Item $books |
-    Import-Excel -Visible |
-    Merge-Excel -Verbose -PageNumber -Path merged.pdf
+    Import-Excel -Verbose -Visible |
+    Merge-Excel -Verbose -PageNumber -Path $pdf |
+    Out-Null

@@ -48,6 +48,7 @@ namespace Cellmate.Cmdlets
         {
             if (this.targetPdf.PageCount > 0)
             {
+                WriteVerbose($"Writing a PDF: {Path}");
                 this.targetPdf.Save(Path);
             }
             this.targetPdf.Close();
@@ -70,11 +71,15 @@ namespace Cellmate.Cmdlets
         void AddPageNumber(Workbook book)
         {
             int pageCount = 0;
+            Window window = book.Windows[1];
             
             foreach (Worksheet sheet in book.Worksheets)
             {
                 if (sheet.Visible == XlSheetVisibility.xlSheetVisible)
                 {
+                    sheet.Activate();
+                    window.View = XlWindowView.xlPageBreakPreview;
+                    
                     if (pageCount == 0)
                     {
                         sheet.PageSetup.FirstPageNumber = this.pageTotal + 1;
@@ -89,7 +94,7 @@ namespace Cellmate.Cmdlets
 
         void AddBook(Workbook book)
         {
-            WriteVerbose($"Merging {book.FullName}");
+            WriteVerbose($"Merging a book: {book.FullName}");
 
             string path = System.IO.Path.ChangeExtension(book.FullName, ".pdf");
             book.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, path);
