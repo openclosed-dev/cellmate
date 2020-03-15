@@ -1,7 +1,6 @@
 $xml = [xml](Get-Content Cellmate.csproj)
 $name = "Cellmate"
-$version = [string]$xml.Project.PropertyGroup.version
-$version = $version.trim()
+$version = $xml.Project.PropertyGroup.version[0]
 $outdir = "bin\$name\$version"
 
 dotnet publish -c Release -o $outdir
