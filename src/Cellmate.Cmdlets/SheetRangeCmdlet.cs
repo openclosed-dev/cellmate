@@ -39,7 +39,10 @@ namespace Cellmate.Cmdlets
                 foreach(var range in ranges)
                 {
                     var intersected = sheet.Application.Intersect(usedRange, sheet.Range[range]);
-                    ProcessRange(book, sheet, intersected);
+                    if (intersected != null)
+                    {
+                        ProcessRange(book, sheet, intersected);
+                    }
                 }
             }
         }
