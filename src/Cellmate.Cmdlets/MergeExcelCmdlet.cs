@@ -84,7 +84,7 @@ namespace Cellmate.Cmdlets
                     {
                         sheet.PageSetup.FirstPageNumber = this.pageTotal + 1;
                     }
-                    sheet.PageSetup.CenterFooter = "&P";
+                    sheet.PageSetup.RightFooter = "&P";
                     pageCount += sheet.PageSetup.Pages.Count;
                 }
             }
