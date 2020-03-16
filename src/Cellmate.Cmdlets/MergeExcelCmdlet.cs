@@ -30,7 +30,7 @@ namespace Cellmate.Cmdlets
         private int pageTotal;
 
         [Parameter(Mandatory = true)]
-        public string Path { get; set; }
+        public string Destination { get; set; }
 
         [Parameter()]
         public SwitchParameter PageNumber { get; set; }
@@ -48,8 +48,8 @@ namespace Cellmate.Cmdlets
         {
             if (this.targetPdf.PageCount > 0)
             {
-                WriteVerbose($"Writing a PDF: {Path}");
-                this.targetPdf.Save(Path);
+                WriteVerbose($"Writing a PDF: {Destination}");
+                this.targetPdf.Save(Destination);
             }
             this.targetPdf.Close();
         }
