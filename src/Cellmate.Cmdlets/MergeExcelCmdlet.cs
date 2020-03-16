@@ -48,8 +48,9 @@ namespace Cellmate.Cmdlets
         {
             if (this.targetPdf.PageCount > 0)
             {
-                WriteVerbose($"Writing a PDF: {Destination}");
-                this.targetPdf.Save(Destination);
+                string path = ResolvePath(Destination);
+                WriteVerbose($"Writing a PDF: {path}");
+                this.targetPdf.Save(path);
             }
             this.targetPdf.Close();
         }

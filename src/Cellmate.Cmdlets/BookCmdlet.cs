@@ -15,17 +15,23 @@
  * limitations under the License.
  */
 #endregion
+using System.IO;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    public abstract class BookCmdlet : Cmdlet
+    public abstract class BookCmdlet : PSCmdlet
     {
         [Parameter(
             ValueFromPipeline = true,
             Mandatory = true)]
         public Workbook InputObject { get; set; }
+
+        public string CurrentLocation
+        {
+            get => SessionState.Path.CurrentLocation.Path;
+        }
 
         protected override void ProcessRecord()
         {
@@ -35,5 +41,10 @@ namespace Cellmate.Cmdlets
         }
 
         protected abstract void ProcessBook(Workbook book);
+
+        protected string ResolvePath(string path)
+        {
+            return Path.Combine(CurrentLocation, path);
+        }
     }
 }

@@ -22,7 +22,7 @@ namespace Cellmate.Cmdlets.Test
     {
         static int Main(string[] args)
         {
-            return ScriptExecutor.Execute("Test-DateCell.ps1");
+            return ScriptExecutor.Execute("Merge-Excel.ps1");
         }
     }
 }

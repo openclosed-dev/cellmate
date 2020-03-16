@@ -4,7 +4,7 @@ $books = @(
     "spec2.xlsx"
 )
 
-$pdf = $pwd.Path + "\merged.pdf"
+$pdf = "merged.pdf"
 
 Get-Item $books |
     Import-Excel -Verbose -Visible |
