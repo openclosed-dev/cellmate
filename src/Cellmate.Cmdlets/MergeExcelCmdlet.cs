@@ -51,6 +51,7 @@ namespace Cellmate.Cmdlets
                 string path = ResolvePath(Destination);
                 WriteVerbose($"Writing a PDF: {path}");
                 this.targetPdf.Save(path);
+                WriteVerbose($"Total pages written: {pageTotal}");
             }
             this.targetPdf.Close();
         }
@@ -71,38 +72,32 @@ namespace Cellmate.Cmdlets
 
         void AddPageNumber(Workbook book)
         {
-            int pageCount = 0;
-            Window window = book.Windows[1];
+            bool firstPage = true;
             
             foreach (Worksheet sheet in book.Worksheets)
             {
                 if (sheet.Visible == XlSheetVisibility.xlSheetVisible)
                 {
-                    sheet.Activate();
-                    window.View = XlWindowView.xlPageBreakPreview;
-                    
-                    if (pageCount == 0)
+                    if (firstPage)
                     {
                         sheet.PageSetup.FirstPageNumber = this.pageTotal + 1;
+                        firstPage = false;
                     }
                     sheet.PageSetup.RightFooter = "&P";
-                    pageCount += sheet.PageSetup.Pages.Count;
                 }
             }
-
-            this.pageTotal += pageCount;
         }
 
         void AddBook(Workbook book)
         {
-            WriteVerbose($"Merging a book: {book.FullName}");
+            WriteVerbose($"Appending a workbook: {book.FullName}");
 
             string path = System.IO.Path.ChangeExtension(book.FullName, ".pdf");
             book.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, path);
 
             try
             {
-                AddPdf(path);
+                AppendPdf(path);
             }
             finally
             {
@@ -113,7 +108,7 @@ namespace Cellmate.Cmdlets
             }
         }
 
-        void AddPdf(string path)
+        void AppendPdf(string path)
         {
             using (PdfDocument pdf = PdfReader.Open(path, PdfDocumentOpenMode.Import))
             {
@@ -121,6 +116,7 @@ namespace Cellmate.Cmdlets
                 {
                     this.targetPdf.AddPage(page);
                 }
+                this.pageTotal += pdf.PageCount;
             }
         }
     }

@@ -46,19 +46,19 @@ namespace Cellmate.Cmdlets.Test
         static void OutputInformation(object sender, DataAddedEventArgs e)
         {
             var record = (sender as PSDataCollection<InformationRecord>) [e.Index];
-            Console.WriteLine($"[INFO] {record.MessageData}");
+            Console.WriteLine($"INFO: {record.MessageData}");
         }
 
         static void OutputVerbose(object sender, DataAddedEventArgs e)
         {
             var record = (sender as PSDataCollection<VerboseRecord>) [e.Index];
-            Console.WriteLine($"[VERBOSE] {record.Message}");
+            Console.WriteLine($"VERBOSE: {record.Message}");
         }
 
         static void OutputWarning(object sender, DataAddedEventArgs e)
         {
             var record = (sender as PSDataCollection<WarningRecord>) [e.Index];
-            Console.WriteLine($"[WARN] {record.Message}");
+            Console.WriteLine($"WARN: {record.Message}");
         }
     }
 }
