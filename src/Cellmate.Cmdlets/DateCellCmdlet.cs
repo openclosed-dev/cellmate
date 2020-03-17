@@ -21,7 +21,7 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    public abstract class DateCellCmdlet : SheetRangeCmdlet
+    public abstract class DateCellCmdlet : CellCmdlet
     {
         [Parameter()]
         public DateTime After { get; set; } = DateTime.MinValue;
@@ -29,26 +29,26 @@ namespace Cellmate.Cmdlets
         [Parameter()]
         public DateTime Before { get; set; } = DateTime.MaxValue;
 
-        protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
+        private DateTime lastDateTime;
+
+        protected override bool TestCell(object value)
         {
-            int rowCount = range.Rows.Count;
-            int columnCount = range.Columns.Count;
-            for (int i = 1; i <= rowCount; i++)
+            DateTime? nullableValue = Values.AsDateTime(value);
+            if (nullableValue.HasValue)
             {
-                for (int j = 1; j <= columnCount; j++)
+                DateTime dateTime = nullableValue.Value; 
+                if (IsDateInRange(dateTime))
                 {
-                    var cell = range[i, j] as Range;
-                    DateTime? value = Values.AsDateTime(cell.Value);
-                    if (value.HasValue)
-                    {
-                        DateTime dateTime = value.Value;
-                        if (IsDateInRange(dateTime))
-                        {
-                            ProcessDate(book, sheet, cell, dateTime);
-                        }
-                    } 
+                    this.lastDateTime = dateTime;
+                    return true;
                 }
             }
+            return false;
+        }
+
+        protected override void ProcessCell(Workbook book, Worksheet sheet, Range cell, object value)
+        {
+            ProcessDate(book, sheet, cell, this.lastDateTime);
         }
 
         protected abstract void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value);

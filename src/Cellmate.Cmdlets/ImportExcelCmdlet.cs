@@ -50,7 +50,7 @@ namespace Cellmate.Cmdlets
         protected override void ProcessRecord()
         {
             var fullName = InputObject.FullName; 
-            WriteVerbose($"Loading a book: {fullName}");
+            WriteVerbose($"Loading a workbook: {fullName}");
             Workbook book = excel.Workbooks.Open(fullName);
             try 
             {

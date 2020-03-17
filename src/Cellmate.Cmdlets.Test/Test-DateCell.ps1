@@ -1,8 +1,7 @@
 Import-Module .\bin\Debug\net47\Cellmate.Cmdlets.dll
+$VerbosePreference = "continue"
 
-$VerbosePreference = 'Continue'
-
-Get-Item sample*.xlsx |
+Get-Item spec*.xlsx |
     Import-Excel |
-    Test-DateCell -Range 3:3 |
+    Test-DateCell |
     Out-Null

@@ -1,7 +1,8 @@
 Import-Module .\bin\Debug\net47\Cellmate.Cmdlets.dll
+$VerbosePreference = "continue"
 
-Get-Item *.xlsx |
+Get-Item spec*.xlsx |
     Import-Excel -Visible |
-    Edit-DateCell -Verbose -Range 1:2 -Value 2020/3/1 | 
-    ConvertFrom-Excel -Format pdf |
+    Edit-DateCell -Before 2020/6/1 -Value 2020/12/25 | 
+    Merge-Excel -Destination "replaced.pdf" |
     Out-Null

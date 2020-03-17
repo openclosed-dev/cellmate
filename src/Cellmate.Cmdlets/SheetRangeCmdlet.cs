@@ -48,12 +48,5 @@ namespace Cellmate.Cmdlets
         }
 
         protected abstract void ProcessRange(Workbook book, Worksheet sheet, Range range);
-
-        Range CalculateRange(Worksheet sheet)
-        {
-            if (Range == null || Range.Length == 0)
-            {}
-                return sheet.UsedRange;
-        }
     }
 }
