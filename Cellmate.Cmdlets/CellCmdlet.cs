@@ -19,7 +19,7 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    public abstract class CellCmdlet : SheetRangeCmdlet
+    public abstract class CellCmdlet : RangeCmdlet
     {
         protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
         {

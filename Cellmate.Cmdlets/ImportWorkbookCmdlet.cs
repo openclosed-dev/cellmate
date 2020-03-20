@@ -22,9 +22,9 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate.Cmdlets
 {
-    [Cmdlet(VerbsData.Import, "Excel"),
+    [Cmdlet(VerbsData.Import, "Workbook"),
      OutputType(typeof(Workbook))]
-    public class ImportExcelCmdlet : Cmdlet
+    public class ImportWorkbookCmdlet : Cmdlet
     {
         private Application excel;
         private bool visible;
@@ -40,6 +40,7 @@ namespace Cellmate.Cmdlets
             get { return visible; }
             set { visible = value; }
         }
+        
         protected override void BeginProcessing()
         {
             excel = new Application();

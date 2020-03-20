@@ -22,9 +22,9 @@ using PdfSharp.Pdf.IO;
 
 namespace Cellmate.Cmdlets
 {
-    [Cmdlet(VerbsData.Merge, "Excel"),
+    [Cmdlet(VerbsData.Merge, "Workbook"),
      OutputType(typeof(Workbook))]
-    public class MergeExcelCmdlet : BookCmdlet
+    public class MergeWorkbookCmdlet : WorkbookCmdlet
     {
         private PdfDocument targetPdf;
         private int pageTotal;

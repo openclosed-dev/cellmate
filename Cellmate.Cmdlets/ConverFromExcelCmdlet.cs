@@ -24,7 +24,7 @@ namespace Cellmate.Cmdlets
 {
     [Cmdlet(VerbsData.ConvertFrom, "Excel"),
      OutputType(typeof(Workbook))]
-    public class ConvertFromExcelCmdlet : BookCmdlet
+    public class ConvertFromExcelCmdlet : WorkbookCmdlet
     {
         [Parameter()]
         public string Suffix { get; set; }
