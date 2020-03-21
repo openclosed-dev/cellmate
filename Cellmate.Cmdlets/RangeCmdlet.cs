@@ -23,7 +23,7 @@ namespace Cellmate.Cmdlets
     public abstract class RangeCmdlet : WorksheetCmdlet
     {
         [Parameter()]
-        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$")]
+        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+):([A-Z]+|\d+|[A-Z]+\d+)?$")]
         public string[] Range { get; set; }
 
         protected override void ProcessSheet(Workbook book, Worksheet sheet)

@@ -1,3 +1,4 @@
+$here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $VerbosePreference = 'Continue'
 Describe "Export-Workbook" {
 
@@ -24,7 +25,7 @@ Describe "Export-Workbook" {
             
         'TestDrive:\Export-Workbook-3.csv'| Should -Exist
         Get-Content 'TestDrive:\Export-Workbook-3.csv' |
-            Should -Be (Get-Content '.\Export-Workbook-3.csv') 
+            Should -Be (Get-Content "$here\Export-Workbook-3.csv") 
     }
 
     It "throws if the format is invalid" {

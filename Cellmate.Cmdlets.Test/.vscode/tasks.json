@@ -10,8 +10,8 @@
             "args": [
                 "-File",
                 "${workspaceFolder}\\TestAll.ps1",
-                "-TargetModule",
-                "${workspaceFolder}\\..\\Cellmate.Cmdlets\\bin\\Debug\\net47\\Cellmate.Cmdlets.dll"
+                "-Configuration",
+                "Debug"
             ],
             "group":{
                 "kind": "test",
