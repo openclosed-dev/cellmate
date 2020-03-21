@@ -15,36 +15,28 @@
  * limitations under the License.
  */
 #endregion
-using System.IO;
+using System;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
-    public abstract class WorkbookCmdlet : PSCmdlet
+    [Cmdlet(VerbsData.Edit, "DateCell"),
+     OutputType(typeof(Workbook))]
+    public class EditDateCellCmdlet : DateCellCmdlet
     {
-        [Parameter(
-            ValueFromPipeline = true,
-            Mandatory = true)]
-        public Workbook InputObject { get; set; }
+        [Parameter(Mandatory = true)]
+        public DateTime Value { get; set; }
 
-        public string CurrentLocation
+        [Parameter()]
+        public string Format { get; set; } = "m/d/yyyy";
+
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
-            get => SessionState.Path.CurrentLocation.Path;
-        }
-
-        protected override void ProcessRecord()
-        {
-            var book = InputObject;
-            ProcessBook(book);
-            WriteObject(book);
-        }
-
-        protected abstract void ProcessBook(Workbook book);
-
-        protected string ResolvePath(string path)
-        {
-            return Path.Combine(CurrentLocation, path);
+            cell.NumberFormat = this.Format;
+            cell.Value = this.Value;
+            var address = cell.Address[false, false];
+            WriteVerbose($"{book.Name}:{sheet.Name}:{address} {value} => {this.Value}");
         }
     }
 }

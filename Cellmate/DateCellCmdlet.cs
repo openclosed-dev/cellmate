@@ -19,7 +19,7 @@ using System;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
     public abstract class DateCellCmdlet : CellCmdlet
     {

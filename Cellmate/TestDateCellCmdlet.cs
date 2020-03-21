@@ -1,4 +1,4 @@
-#region copyright
+﻿#region copyright
 /*
  * Copyright 2020 the original author or authors.
  *
@@ -15,21 +15,20 @@
  * limitations under the License.
  */
 #endregion
+using System;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
-    public abstract class WorksheetCmdlet : WorkbookCmdlet
+    [Cmdlet(VerbsDiagnostic.Test, "DateCell"),
+     OutputType(typeof(Workbook))]
+    public class TestDateCellCmdlet : DateCellCmdlet
     {
-        protected override void ProcessBook(Workbook book)
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
         {
-            foreach (Worksheet sheet in book.Worksheets)
-            {
-                ProcessSheet(book, sheet);
-            }
+            var address = cell.Address[false, false];
+            WriteWarning($"{book.Name}:{sheet.Name}:{address} {value}");
         }
-
-        protected abstract void ProcessSheet(Workbook book, Worksheet sheet);
     }
 }

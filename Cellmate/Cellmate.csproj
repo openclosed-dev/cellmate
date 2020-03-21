@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <Version>0.4.0</Version>
+    <OutputType>library</OutputType>
+    <TargetFramework>net47</TargetFramework>
     <Copyright>Copyright 2020 the original author. All rights reserved.</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <OutputType>exe</OutputType>
-    <TargetFramework>net47</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
@@ -15,12 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../Cellmate.Cmdlets/Cellmate.Cmdlets.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.7.82" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
     <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
+    <PackageReference Include="PdfSharp" Version="1.50.5147" />
   </ItemGroup>
 
 </Project>

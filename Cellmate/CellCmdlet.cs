@@ -17,7 +17,7 @@
 #endregion
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
     public abstract class CellCmdlet : RangeCmdlet
     {

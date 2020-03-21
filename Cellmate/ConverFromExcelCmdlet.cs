@@ -20,7 +20,7 @@ using System.IO;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
     [Cmdlet(VerbsData.ConvertFrom, "Excel"),
      OutputType(typeof(Workbook))]

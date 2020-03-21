@@ -20,7 +20,7 @@ using Microsoft.Office.Interop.Excel;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
     [Cmdlet(VerbsData.Merge, "Workbook"),
      OutputType(typeof(Workbook))]

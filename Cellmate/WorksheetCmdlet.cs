@@ -15,27 +15,20 @@
  * limitations under the License.
  */
 #endregion
-using System;
+using Microsoft.Office.Interop.Excel;
 
-namespace Cellmate.Cmdlets
+namespace Cellmate
 {
-    class Values
+    public abstract class WorksheetCmdlet : WorkbookCmdlet
     {
-        public static DateTime? AsDateTime(object value)
+        protected override void ProcessBook(Workbook book)
         {
-            if (value is DateTime dateTime)
+            foreach (Worksheet sheet in book.Worksheets)
             {
-                return dateTime;
+                ProcessSheet(book, sheet);
             }
-            else if (value is string s)
-            {
-                DateTime parsed;
-                if (DateTime.TryParse(s, out parsed))
-                {
-                    return parsed;
-                }
-            }
-            return null;
         }
+
+        protected abstract void ProcessSheet(Workbook book, Worksheet sheet);
     }
 }
