@@ -1,10 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.4.0</Version>
+    <Version>0.5.0-SNAPSHOT</Version>
     <OutputType>library</OutputType>
     <TargetFramework>net47</TargetFramework>
-    <Copyright>Copyright 2020 the original author. All rights reserved.</Copyright>
+    <Copyright>Copyright 2020 the Cellmate Author. All rights reserved.</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>

@@ -26,98 +26,47 @@ namespace Cellmate
      OutputType(typeof(Workbook))]
     public class MergeWorkbookCmdlet : WorkbookCmdlet
     {
-        private PdfDocument targetPdf;
-        private int pageTotal;
+        public enum OutputFormat
+        {
+            Pdf
+        }
+
+        private IWorkbookCombiner combiner;
+
+        [Parameter(Mandatory = true)]
+        public OutputFormat As { get; set; }
 
         [Parameter(Mandatory = true)]
         public string Destination { get; set; }
 
         [Parameter()]
-        public SwitchParameter PageNumber { get; set; }
+        public PageNumberPosition PageNumber { get; set; } = PageNumberPosition.None;
 
         [Parameter()]
-        public SwitchParameter Keep { get; set; }
+        public SwitchParameter SaveEach { get; set; }
 
         protected override void BeginProcessing()
         {
-           this.targetPdf = new PdfDocument();
-           this.pageTotal = 0;
+           this.combiner = new PdfWorkbookCombiner(PageNumber, SaveEach.IsPresent);
         }
 
         protected override void EndProcessing()
         {
-            if (this.targetPdf.PageCount > 0)
-            {
-                string path = ResolvePath(Destination);
-                WriteVerbose($"Writing a PDF: {path}");
-                this.targetPdf.Save(path);
-                WriteVerbose($"Total pages written: {pageTotal}");
-            }
-            this.targetPdf.Close();
+            string path = ResolvePath(Destination);
+            WriteVerbose($"Writing a {combiner.FormatName}: {path}");
+            this.combiner.SaveAs(path);
+            this.combiner.Close();
         }
 
         protected override void StopProcessing()
         {
-            this.targetPdf.Close();
+            this.combiner.Close();
         }
 
         protected override void ProcessBook(Workbook book)
         {
-            if (PageNumber.IsPresent)
-            {
-                AddPageNumber(book);
-            }
-            AddBook(book);
-        }
-
-        void AddPageNumber(Workbook book)
-        {
-            bool firstPage = true;
-            
-            foreach (Worksheet sheet in book.Worksheets)
-            {
-                if (sheet.Visible == XlSheetVisibility.xlSheetVisible)
-                {
-                    if (firstPage)
-                    {
-                        sheet.PageSetup.FirstPageNumber = this.pageTotal + 1;
-                        firstPage = false;
-                    }
-                    sheet.PageSetup.RightFooter = "&P";
-                }
-            }
-        }
-
-        void AddBook(Workbook book)
-        {
             WriteVerbose($"Appending a workbook: {book.FullName}");
-
-            string path = System.IO.Path.ChangeExtension(book.FullName, ".pdf");
-            book.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, path);
-
-            try
-            {
-                AppendPdf(path);
-            }
-            finally
-            {
-                if (!Keep.IsPresent)
-                {
-                    System.IO.File.Delete(path);
-                }
-            }
-        }
-
-        void AppendPdf(string path)
-        {
-            using (PdfDocument pdf = PdfReader.Open(path, PdfDocumentOpenMode.Import))
-            {
-                foreach (var page in pdf.Pages)
-                {
-                    this.targetPdf.AddPage(page);
-                }
-                this.pageTotal += pdf.PageCount;
-            }
+            this.combiner.Append(book);
         }
     }
 }

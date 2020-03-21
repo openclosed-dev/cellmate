@@ -21,17 +21,18 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    public enum OutputFormat 
-    {
-        Default,
-        Csv,
-        Pdf
-    }
-
     [Cmdlet(VerbsData.Export, "Workbook"),
      OutputType(typeof(Workbook))]
     public class ExportWorkbookCmdlet : WorkbookCmdlet
     {
+        public enum OutputFormat 
+        {
+            Default,
+            Csv,
+            Pdf,
+            Xps
+        }
+
         [Parameter()]
         public OutputFormat As { get; set; } = OutputFormat.Default;
 
@@ -53,10 +54,30 @@ namespace Cellmate
                 case OutputFormat.Csv:
                     SaveBookAs(book, XlFileFormat.xlCSV, ".csv");
                     break; 
+                case OutputFormat.Pdf:
+                    ExportBookAs(book, XlFixedFormatType.xlTypePDF, ".pdf");
+                    break; 
+                case OutputFormat.Xps:
+                    ExportBookAs(book, XlFixedFormatType.xlTypeXPS, ".xps");
+                    break; 
             }
         }
 
         void SaveBookAs(Workbook book, XlFileFormat format, string extension)
+        {
+            var filename = GetTargetName(book, extension);
+            WriteVerbose($"Exporting a workbook: {filename}");
+            book.SaveAs(filename, format, Local : true);
+        }
+
+        void ExportBookAs(Workbook book, XlFixedFormatType format, string extension)
+        {
+            var filename = GetTargetName(book, extension);
+            WriteVerbose($"Exporting a workbook: {filename}");
+            book.ExportAsFixedFormat(format, filename);
+        }
+
+        string GetTargetName(Workbook book, string extension)
         {
             string filename = book.FullName;
             
@@ -65,9 +86,8 @@ namespace Cellmate
             
             if (extension != null)
                 filename = Path.ChangeExtension(filename, extension); 
-
-            WriteVerbose($"Exporting {filename}");
-            book.SaveAs(filename, format, Local : true);
+            
+            return filename;
         }
     }
 }
