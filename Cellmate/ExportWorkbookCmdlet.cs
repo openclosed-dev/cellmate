@@ -67,7 +67,7 @@ namespace Cellmate
                 filename = Path.ChangeExtension(filename, extension); 
 
             WriteVerbose($"Exporting {filename}");
-            book.SaveAs(filename, format);
+            book.SaveAs(filename, format, Local : true);
         }
     }
 }
