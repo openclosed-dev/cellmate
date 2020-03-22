@@ -2,19 +2,23 @@
 
 Cellmate is a collection of PowerShell cmdlets for processing Excel workbooks.
 
-## How to Intall
+## How to Install
 
-Unpack the zip file `Cellmate-<version>.zip` into the folder `\Users\<your name>\Documents\WindowsPowerShell\Modules` for your account.
+1. Unpack the zip file `Cellmate-<version>.zip`.
+2. Move the unpacked `Cellmate` directory into `\Users\<user name>\Documents\WindowsPowerShell\Modules` for your account.
 
-## Examples
+## Code Samples
 
 This section shows PowerShell scripts as examples.
 
 #### Merging multiple workbooks into a PDF file
+_merge-books.ps1_
 ```powershell
 Import-Module Cellmate
+
 $VerbosePreference = 'continue'
 $books = 'book1.xlsx', 'book2.xlsx'
+
 Get-Item $books |
     Import-Workbook |
     Merge-Workbook -As Pdf -PageNumber Right -Destination 'merged.pdf' |

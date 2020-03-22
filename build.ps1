@@ -40,6 +40,7 @@ Pop-Location
 
 dotnet publish $project -c Release -o $destDir
 
+Copy-Item -Path "$here\README.html" -Destination $destDir
 Copy-Item -Path "$here\LICENSE" -Destination $destDir
 Copy-Item -Path "$here\CHANGELOG.md" -Destination $destDir
 Copy-Item -Path "$here\NOTICE.md" -Destination $destDir
