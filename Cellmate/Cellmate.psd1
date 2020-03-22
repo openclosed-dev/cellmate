@@ -5,10 +5,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = '.\Cellmate.Cmdlets.dll'
+RootModule = '.\Cellmate.dll'
 
 # Version number of this module.
-ModuleVersion = '0.4.0'
+ModuleVersion = '0.5.0'
 
 # ID used to uniquely identify this module
 GUID = 'c04e8722-3530-4700-ba8c-03123835738f'
@@ -25,11 +25,10 @@ Copyright = '(c) 2020 Cellmate Author. All rights reserved.'
 
 # Cmdlets to export from this module
 CmdletsToExport = @(
-    'ConvertFrom-Excel',
-    'Edit-DateCell',
-    'Export-Excel',
-    'Import-Excel',
-    'Merge-Excel',
+    'Edit-DateCell'
+    'Export-Workbook',
+    'Import-Workbook',
+    'Merge-Workbook',
     'Test-DateCell'
 )
 }
