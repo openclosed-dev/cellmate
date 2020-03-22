@@ -21,22 +21,15 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsData.Edit, "DateCell"),
+    [Cmdlet(VerbsCommon.Clear, "DateCell"),
      OutputType(typeof(Workbook))]
-    public class EditDateCellCmdlet : DateCellCmdlet
+    public class ClearDateCellCmdlet : DateCellCmdlet
     {
-        [Parameter(Mandatory = true)]
-        public DateTime Value { get; set; }
-
-        [Parameter()]
-        public string Format { get; set; } = "m/d/yyyy";
-
-        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value)
+        protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, object value)
         {
-            cell.NumberFormat = this.Format;
-            cell.Value = this.Value;
+            cell.Value = null;
             var address = cell.Address[false, false];
-            WriteVerbose($"{book.Name}:{sheet.Name}:{address} {value} => {this.Value}");
+            WriteVerbose($"Cleared {book.Name}:{sheet.Name}:{address} {value}");
         }
     }
 }

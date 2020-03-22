@@ -29,29 +29,23 @@ namespace Cellmate
         [Parameter()]
         public DateTime Before { get; set; } = DateTime.MaxValue;
 
-        private DateTime lastDateTime;
-
         protected override bool TestCell(object value)
         {
             DateTime? nullableValue = Values.AsDateTime(value);
             if (nullableValue.HasValue)
             {
                 DateTime dateTime = nullableValue.Value; 
-                if (IsDateInRange(dateTime))
-                {
-                    this.lastDateTime = dateTime;
-                    return true;
-                }
+                return IsDateInRange(dateTime);
             }
             return false;
         }
 
         protected override void ProcessCell(Workbook book, Worksheet sheet, Range cell, object value)
         {
-            ProcessDate(book, sheet, cell, this.lastDateTime);
+            ProcessDate(book, sheet, cell, value);
         }
 
-        protected abstract void ProcessDate(Workbook book, Worksheet sheet, Range cell, DateTime value);
+        protected abstract void ProcessDate(Workbook book, Worksheet sheet, Range cell, object value);
 
         bool IsDateInRange(DateTime value)
         {

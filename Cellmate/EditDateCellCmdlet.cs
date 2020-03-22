@@ -1,4 +1,4 @@
-﻿#region copyright
+#region copyright
 /*
  * Copyright 2020 the original author or authors.
  *
@@ -21,14 +21,22 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsDiagnostic.Test, "DateCell"),
+    [Cmdlet(VerbsData.Edit, "DateCell"),
      OutputType(typeof(Workbook))]
-    public class TestDateCellCmdlet : DateCellCmdlet
+    public class EditDateCellCmdlet : DateCellCmdlet
     {
+        [Parameter(Mandatory = true)]
+        public DateTime Value { get; set; }
+
+        [Parameter()]
+        public string Format { get; set; } = "m/d/yyyy";
+
         protected override void ProcessDate(Workbook book, Worksheet sheet, Range cell, object value)
         {
+            cell.NumberFormat = this.Format;
+            cell.Value = this.Value;
             var address = cell.Address[false, false];
-            WriteWarning($"{book.Name}:{sheet.Name}:{address} {value}");
+            WriteVerbose($"Replaced {book.Name}:{sheet.Name}:{address} {value} with {this.Value}");
         }
     }
 }

@@ -25,7 +25,8 @@ Copyright = '(c) 2020 Cellmate Author. All rights reserved.'
 
 # Cmdlets to export from this module
 CmdletsToExport = @(
-    'Edit-DateCell'
+    'Clear-DateCell',
+    'Edit-DateCell',
     'Export-Workbook',
     'Import-Workbook',
     'Merge-Workbook',
