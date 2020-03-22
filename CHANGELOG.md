@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.5.0 - 2020-03-22
 ### Added
 - Compress-Workbook cmdlet for compressing input workbooks.
+- Clear-DateCell cmdlet.
 
 ### Changed
 - Rename cmdlets Import-Excel/Export-Excel/Merge-Excel to
