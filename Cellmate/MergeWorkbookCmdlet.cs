@@ -36,7 +36,7 @@ namespace Cellmate
         [Parameter(Mandatory = true)]
         public OutputFormat As { get; set; }
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Position = 0, Mandatory = true)]
         public string Destination { get; set; }
 
         [Parameter()]

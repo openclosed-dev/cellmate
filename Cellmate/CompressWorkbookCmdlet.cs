@@ -30,7 +30,7 @@ namespace Cellmate
         private Encoding entryEncoding;
         private ZipArchive zipArchive;
 
-        [Parameter(Mandatory = true)]
+        [Parameter(Position = 0, Mandatory = true)]
         public string Destination { get; set; }
 
         [Parameter()]

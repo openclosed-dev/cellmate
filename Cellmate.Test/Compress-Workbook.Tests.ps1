@@ -12,4 +12,12 @@ Describe "Compress-Workbook" {
 
         "$result\output-1.zip" | Should -Exist
     }
+
+    It "compresses workbooks as ZIP using positional parameter" {
+        Get-Item $books | 
+            Import-Workbook |
+            Compress-Workbook "$result\output-2.zip" > $null
+
+        "$result\output-2.zip" | Should -Exist
+    }
 }
