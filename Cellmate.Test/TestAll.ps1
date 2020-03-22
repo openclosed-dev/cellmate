@@ -1,4 +1,4 @@
-param([string]$Configuration = 'Debug')
+param([string]$configuration = 'Product')
 
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path -Parent $here
@@ -6,6 +6,13 @@ $root = Split-Path -Parent $here
 New-Item "$here\result" -ItemType Directory -Force > $null
 Remove-Item "$here\result\*"
 
-Import-Module $root\Cellmate\bin\$Configuration\net47\Cellmate.dll
+if ($configuration -eq 'Product') {
+    $sut = 'Cellmate'
+} else {
+    $sut = "$root\Cellmate\bin\$configuration\net47\Cellmate.dll"
+}
+
+Write-Host "Loading a module: $sut"
+Import-Module $sut
 Invoke-Pester
 Remove-Module Cellmate

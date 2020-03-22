@@ -42,6 +42,7 @@ dotnet publish $project -c Release -o $destDir
 
 Copy-Item -Path "$here\LICENSE" -Destination $destDir
 Copy-Item -Path "$here\CHANGELOG.md" -Destination $destDir
+Copy-Item -Path "$here\NOTICE.md" -Destination $destDir
 Copy-Item -Path "$projectDir\Cellmate.psd1" -Destination $destDir
 
 Compress-Archive -Path "$projectDir\bin\$name" -DestinationPath $archive
