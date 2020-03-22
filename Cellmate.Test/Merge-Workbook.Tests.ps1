@@ -3,7 +3,7 @@ $result = "$here\result"
 $VerbosePreference = 'Continue'
 Describe "Merge-Workbook" {
 
-    $books = @('Merge-Workbook-1.csv', 'Merge-Workbook-2.csv')
+    $books = @('Months.csv', 'SolarSystem.csv')
 
     It "merges workbooks as PDF" {
         Get-Item $books | 

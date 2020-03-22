@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 #endregion
-using System;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
 

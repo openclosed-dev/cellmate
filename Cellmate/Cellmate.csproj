@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.5.0-SNAPSHOT</Version>
+    <Version>0.5.0</Version>
     <OutputType>library</OutputType>
     <TargetFramework>net47</TargetFramework>
     <Copyright>Copyright 2020 the Cellmate Author. All rights reserved.</Copyright>
@@ -13,6 +13,10 @@
     <DebugType>None</DebugType>
     <PublishSingleFile>false</PublishSingleFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.IO.Compression" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />

@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## 0.5.0 - 2020-03-22
+### Added
+- Compress-Workbook cmdlet for compressing input workbooks.
+
 ### Changed
 - Rename cmdlets Import-Excel/Export-Excel/Merge-Excel to
-Import-Workbook/Export-Workbook/Merge-Workbook.
+Import-Workbook/Export-Workbook/Merge-Workbook respectively.
 - -PageNumber parameter now takes left/center/right as its value.
 - DLL name was shortened to Cellmate.dll.
 

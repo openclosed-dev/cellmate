@@ -1,7 +1,7 @@
 Describe "Import-Workbook" {
 
     It "imports a single workbook" {
-        $actual = Get-Item "Import-Workbook-1.csv" | 
+        $actual = Get-Item "Months.csv" | 
             Import-Workbook |
             ForEach-Object { $_.Worksheets.Count }
             
@@ -9,7 +9,7 @@ Describe "Import-Workbook" {
     }
 
     It "imports multiple workbooks" {
-        $books = "Import-Workbook-1.csv", "Import-Workbook-2.csv"
+        $books = "Months.csv", "SolarSystem.csv"
         $actual = Get-Item $books | 
             Import-Workbook |
             ForEach-Object { $_.Worksheets.Count }
