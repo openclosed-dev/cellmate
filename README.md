@@ -26,7 +26,7 @@ $books = 'book1.xlsx', 'book2.xlsx', 'book3.xlsx'
 
 Get-Item $books |
     Import-Workbook |
-    Merge-Workbook -As Pdf -PageNumber Right -Destination 'target.pdf' |
+    Merge-Workbook -As Pdf -PageNumber Right 'target.pdf' |
     Out-Null
 ```
 
@@ -40,7 +40,7 @@ $books = 'book1.xlsx', 'book2.xlsx', 'book3.xlsx'
 
 Get-Item $books |
     Import-Workbook |
-    Compress-Workbook -Destination 'target.pdf' |
+    Compress-Workbook 'target.pdf' |
     Out-Null
 ```
 

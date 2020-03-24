@@ -23,22 +23,24 @@ namespace Cellmate
     public abstract class RangeCmdlet : WorksheetCmdlet
     {
         [Parameter()]
-        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+):([A-Z]+|\d+|[A-Z]+\d+)?$")]
+        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$")]
         public string[] Range { get; set; }
+
+        public virtual bool UsedRangeOnly { get => true; }
 
         protected override void ProcessSheet(Workbook book, Worksheet sheet)
         {
             string[] ranges = Range;
-            Range usedRange = sheet.UsedRange;
+            Range whole = UsedRangeOnly ? sheet.UsedRange : sheet.Cells;
             if (ranges == null)
             {
-                ProcessRange(book, sheet, usedRange);
+                ProcessRange(book, sheet, whole);
             }
             else
             {
                 foreach(var range in ranges)
                 {
-                    var intersected = sheet.Application.Intersect(usedRange, sheet.Range[range]);
+                    var intersected = sheet.Application.Intersect(whole, sheet.Range[range]);
                     if (intersected != null)
                     {
                         ProcessRange(book, sheet, intersected);

@@ -36,7 +36,7 @@ namespace Cellmate
         [Parameter()]
         public OutputFormat As { get; set; } = OutputFormat.Default;
 
-        [Parameter()]
+        [Parameter(Position = 0)]
         public string Destination { get; set; }
         
         protected override void ProcessBook(Workbook book)
@@ -82,7 +82,7 @@ namespace Cellmate
             string filename = book.FullName;
             
             if (Destination != null)
-                filename = Path.Combine(Destination, Path.GetFileName(filename));
+                filename = Path.Combine(ResolvePath(Destination), Path.GetFileName(filename));
             
             if (extension != null)
                 filename = Path.ChangeExtension(filename, extension); 

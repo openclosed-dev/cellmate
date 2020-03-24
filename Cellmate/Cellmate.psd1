@@ -8,7 +8,7 @@
 RootModule = '.\Cellmate.dll'
 
 # Version number of this module.
-ModuleVersion = '0.6.0-SNAPSHOT'
+ModuleVersion = '0.6.0'
 
 # ID used to uniquely identify this module
 GUID = 'c04e8722-3530-4700-ba8c-03123835738f'
@@ -30,6 +30,7 @@ CmdletsToExport = @(
     'Edit-DateCell',
     'Export-Workbook',
     'Import-Workbook',
+    'Merge-Cell',
     'Merge-Workbook',
     'Test-DateCell'
 )
