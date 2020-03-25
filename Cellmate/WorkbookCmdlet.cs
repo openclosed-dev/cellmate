@@ -23,10 +23,15 @@ namespace Cellmate
 {
     public abstract class WorkbookCmdlet : PSCmdlet
     {
+        private int bookCount;
+
         [Parameter(
             ValueFromPipeline = true,
             Mandatory = true)]
         public Workbook InputObject { get; set; }
+
+        [Parameter()]
+        public int SkipBooks { get; set; }
 
         public string CurrentLocation
         {
@@ -36,7 +41,10 @@ namespace Cellmate
         protected override void ProcessRecord()
         {
             var book = InputObject;
-            ProcessBook(book);
+            if (++bookCount > SkipBooks)
+            {
+                ProcessBook(book);
+            }
             WriteObject(book);
         }
 
