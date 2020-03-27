@@ -40,7 +40,7 @@ $books = 'book1.xlsx', 'book2.xlsx', 'book3.xlsx'
 
 Get-Item $books |
     Import-Workbook |
-    Compress-Workbook 'target.pdf' |
+    Compress-Workbook 'target.zip' |
     Out-Null
 ```
 

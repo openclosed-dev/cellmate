@@ -27,15 +27,26 @@ namespace Cellmate
 
         [Parameter(
             ValueFromPipeline = true,
-            Mandatory = true)]
+            Mandatory = true,
+            HelpMessage = "Input workbooks." 
+            )]
         public Workbook InputObject { get; set; }
 
-        [Parameter()]
+        [Parameter(
+            HelpMessage = "The number of workbooks to be skipped." 
+        )]
         public int SkipBooks { get; set; }
 
         public string CurrentLocation
         {
-            get => SessionState.Path.CurrentLocation.Path;
+            get
+            {
+                var location = SessionState.Path.CurrentLocation;
+                if (location.Provider.Name == "FileSystem")
+                    return location.ProviderPath;
+                else
+                    return location.Path;
+            }
         }
 
         protected override void ProcessRecord()
