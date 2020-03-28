@@ -375,8 +375,9 @@ code {
 </ul>
 <h2 id="how-to-install">How to Install</h2>
 <ol>
+<li>Close active PowerShell sessions if any exists.</li>
 <li>Unpack the zip file <code>Cellmate-&lt;version&gt;.zip</code>.</li>
-<li>Move the unpacked <code>Cellmate</code> directory into <code>\Users\&lt;user name&gt;\Documents\WindowsPowerShell\Modules</code> for your account.</li>
+<li>Copy the unpacked <code>Cellmate</code> directory into <code>\Users\&lt;user name&gt;\Documents\WindowsPowerShell\Modules</code> for your account. The resulting directory will be <code>\Users\&lt;user name&gt;\Documents\WindowsPowerShell\Modules\Cellmate\&lt;version&gt;</code>.</li>
 </ol>
 <h2 id="code-samples">Code Samples</h2>
 <p>This section shows PowerShell scripts as examples.</p>
@@ -384,24 +385,24 @@ code {
 <p><em>merge-books.ps1</em></p>
 <pre class="hljs"><code><div><span class="hljs-built_in">Import-Module</span> Cellmate
 
-<span class="hljs-variable">$VerbosePreference</span> = <span class="hljs-string">'continue'</span>
-<span class="hljs-variable">$books</span> = <span class="hljs-string">'book1.xlsx'</span>, <span class="hljs-string">'book2.xlsx'</span>, <span class="hljs-string">'book3.xlsx'</span>
+<span class="hljs-variable">$VerbosePreference</span> = <span class="hljs-string">"continue"</span>
+<span class="hljs-variable">$books</span> = <span class="hljs-string">"book1.xlsx"</span>, <span class="hljs-string">"book2.xlsx"</span>, <span class="hljs-string">"book3.xlsx"</span>
 
 <span class="hljs-built_in">Get-Item</span> <span class="hljs-variable">$books</span> |
     <span class="hljs-built_in">Import-Workbook</span> |
-    <span class="hljs-built_in">Merge-Workbook</span> <span class="hljs-operator">-As</span> Pdf <span class="hljs-literal">-PageNumber</span> Right <span class="hljs-string">'target.pdf'</span> |
+    <span class="hljs-built_in">Merge-Workbook</span> <span class="hljs-operator">-As</span> Pdf <span class="hljs-literal">-PageNumber</span> Right <span class="hljs-string">"target.pdf"</span> |
     <span class="hljs-built_in">Out-Null</span>
 </div></code></pre>
-<h4 id="compressing-workbooks-into-a-zip-file">Compressing workbooks into a ZIP file</h4>
-<p><em>compress-books.ps1</em></p>
+<h4 id="archiving-workbooks-into-a-zip-file">Archiving workbooks into a ZIP file</h4>
+<p><em>archive-books.ps1</em></p>
 <pre class="hljs"><code><div><span class="hljs-built_in">Import-Module</span> Cellmate
 
-<span class="hljs-variable">$VerbosePreference</span> = <span class="hljs-string">'continue'</span>
-<span class="hljs-variable">$books</span> = <span class="hljs-string">'book1.xlsx'</span>, <span class="hljs-string">'book2.xlsx'</span>, <span class="hljs-string">'book3.xlsx'</span>
+<span class="hljs-variable">$VerbosePreference</span> = <span class="hljs-string">"continue"</span>
+<span class="hljs-variable">$books</span> = <span class="hljs-string">"book1.xlsx"</span>, <span class="hljs-string">"book2.xlsx"</span>, <span class="hljs-string">"book3.xlsx"</span>
 
 <span class="hljs-built_in">Get-Item</span> <span class="hljs-variable">$books</span> |
     <span class="hljs-built_in">Import-Workbook</span> |
-    <span class="hljs-built_in">Compress-Workbook</span> <span class="hljs-string">'target.zip'</span> |
+    <span class="hljs-built_in">Compress-Workbook</span> <span class="hljs-string">"target.zip"</span> |
     <span class="hljs-built_in">Out-Null</span>
 </div></code></pre>
 <h2 id="copyright-notice">Copyright Notice</h2>
