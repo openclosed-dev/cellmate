@@ -22,9 +22,11 @@ namespace Cellmate
 {
     public abstract class RangeCmdlet : WorksheetCmdlet
     {
+        protected const string RangePattern = @"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$";
+
         [Parameter()]
-        [ValidatePattern(@"^([A-Z]+|\d+|[A-Z]+\d+)(:([A-Z]+|\d+|[A-Z]+\d+))?$")]
-        public string[] Range { get; set; }
+        [ValidatePattern(RangePattern)]
+        public virtual string[] Range { get; set; }
 
         public virtual bool UsedRangeOnly { get => true; }
 

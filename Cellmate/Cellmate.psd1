@@ -30,7 +30,7 @@ CmdletsToExport = @(
     'Edit-DateCell',
     'Export-Workbook',
     'Import-Workbook',
-    'Merge-Cell',
+    'Merge-BorderedWorksheetRange',
     'Merge-Workbook',
     'Test-DateCell'
 )

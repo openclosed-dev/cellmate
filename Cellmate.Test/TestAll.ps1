@@ -4,7 +4,7 @@ $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path -Parent $here
 
 New-Item "$here\result" -ItemType Directory -Force > $null
-Remove-Item "$here\result\*"
+Get-ChildItem $here -Filter "result" | Get-ChildItem | Remove-Item
 
 if ($configuration -eq 'Product') {
     $sut = 'Cellmate'

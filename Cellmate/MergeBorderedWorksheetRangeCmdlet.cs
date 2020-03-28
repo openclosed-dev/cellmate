@@ -20,27 +20,30 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsData.Merge, "Cell"),
+    [Cmdlet(VerbsData.Merge, "BorderedWorksheetRange"),
      OutputType(typeof(Workbook))]
-    public class MergeCellCmdlet : RangeCmdlet
+    public class MergeBorderedWorksheetRangeCmdlet : RangeCmdlet
     {
-        [Parameter()]
-        public int SkipColumns { get; set; }
+        [Parameter(Mandatory = true)]
+        [ValidatePattern(RangePattern)]
+        public override string[] Range { get; set; }
 
-        [Parameter()]
-        public SwitchParameter Bordered;
+        [Parameter(
+            HelpMessage = "Horizontal offset"
+        )]
+        public int ColumnOffset { get; set; }
 
         public override bool UsedRangeOnly { get => false; }
 
         protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
         {
             Range rangeToMerge = GetBorderedRange(range);
-            if (SkipColumns > 0)
+            if (ColumnOffset > 0)
             {
-                rangeToMerge = GetSkippedRange(rangeToMerge, SkipColumns);
+                rangeToMerge = GetSkippedRange(rangeToMerge, ColumnOffset);
             }
             var address = rangeToMerge.Address[false, false];
-            WriteVerbose($"Merging cells: {address}");
+            WriteVerbose($"Merging worsheet range: {address}");
             rangeToMerge.Merge();
         }
 
