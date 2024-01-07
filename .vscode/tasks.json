@@ -22,7 +22,33 @@
                 "reveal": "silent",
                 "revealProblems": "onProblem"
             },
-            "problemMatcher": "$msCompile"
+            "problemMatcher": "$msCompile",
+            "options": {
+                "cwd": "${workspaceFolder}/Cellmate"
+            }
+        },
+        {
+            "label": "pester",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-File",
+                "TestAll.ps1",
+                "-Configuration",
+                "Debug"
+            ],
+            "group":{
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": "$pester",
+            "options": {
+                "cwd": "${workspaceFolder}/Cellmate.Test"
+            }
         }
     ]
 }
