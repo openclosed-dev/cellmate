@@ -14,6 +14,11 @@
 # limitations under the License.
 #
 
+if ($PSVersionTable.PSVersion.Major -ne '5') {
+    Write-Error "PowerShell 5.x is required to execute."
+    exit 1
+}
+
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $name = "Cellmate"
 $projectDir = "$here\Cellmate"
@@ -23,19 +28,23 @@ $testProjectDir = "$here\Cellmate.Test"
 $xml = [xml](Get-Content $project)
 $version = $xml.Project.PropertyGroup.version[0]
 
-$destDir = "$projectDir\bin\$name\$version"
+$binDir = "$projectDir\bin"
+$destDir = "$binDir\$name\$version"
 $archive = "$here\$name-$version.zip"
 
 if (Test-Path $archive) {
     Remove-Item $archive
 }
-Remove-Item -Force -Recurse "$projectDir\bin"
+
+if (Test-Path $binDir) {
+    Remove-Item -Force -Recurse $binDir
+}
 
 dotnet build $project -c Release
 
 # Runs unit tests
 PUsh-Location $testProjectDir
-    & .\TestAll.ps1 -Configuration Release
+powershell -File .\TestAll.ps1 -Configuration Release
 Pop-Location
 
 dotnet publish $project -c Release -o $destDir

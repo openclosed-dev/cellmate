@@ -9,10 +9,10 @@ Get-ChildItem $here -Filter "result" | Get-ChildItem | Remove-Item
 if ($configuration -eq 'Product') {
     $sut = 'Cellmate'
 } else {
-    $sut = "$root\Cellmate\bin\$configuration\net47\Cellmate.dll"
+    $sut = "$root\Cellmate\bin\$configuration\net48\Cellmate.dll"
 }
 
 Write-Host "Loading a module: $sut"
 Import-Module $sut
 Invoke-Pester
-Remove-Module Cellmate
+Remove-Module -Force Cellmate

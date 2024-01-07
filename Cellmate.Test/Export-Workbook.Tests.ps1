@@ -1,6 +1,10 @@
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$result = "$here\result"
 $VerbosePreference = 'Continue'
+
+BeforeAll {
+    $here = Split-Path -Parent $PSCommandPath
+    $result = "$here\result"
+}
+
 Describe "Export-Workbook" {
 
     It "exports as default" {

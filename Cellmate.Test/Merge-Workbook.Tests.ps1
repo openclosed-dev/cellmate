@@ -1,12 +1,15 @@
-$here = Split-Path -Parent $MyInvocation.MyCommand.Path
-$result = "$here\result"
 $VerbosePreference = 'Continue'
+
+BeforeAll {
+    $here = Split-Path -Parent $PSCommandPath
+    $result = "$here\result"
+    $books = @('Months.csv', 'SolarSystem.csv')
+}
+
 Describe "Merge-Workbook" {
 
-    $books = @('Months.csv', 'SolarSystem.csv')
-
     It "merges workbooks as PDF" {
-        Get-Item $books | 
+        Get-Item $books |
             Import-Workbook |
             Merge-Workbook -As Pdf -Destination "$result\merged-1.pdf" > $null
 
@@ -14,7 +17,7 @@ Describe "Merge-Workbook" {
     }
 
     It "merges workbooks as PDF using positional parameter" {
-        Get-Item $books | 
+        Get-Item $books |
             Import-Workbook |
             Merge-Workbook -As Pdf "$result\merged-2.pdf" > $null
 

@@ -8,7 +8,7 @@
 RootModule = '.\Cellmate.dll'
 
 # Version number of this module.
-ModuleVersion = '0.7.0'
+ModuleVersion = '0.8.0'
 
 # ID used to uniquely identify this module
 GUID = 'c04e8722-3530-4700-ba8c-03123835738f'
@@ -18,10 +18,10 @@ CompanyName = ''
 Copyright = '(c) 2020 Cellmate Author. All rights reserved.'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Cellmate is a collection of PowerShell cmdlets for processing Excel workbooks.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-# PowerShellVersion = '5.1'
+PowerShellVersion = '5.1'
 
 # Cmdlets to export from this module
 CmdletsToExport = @(
