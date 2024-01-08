@@ -1,6 +1,6 @@
 #region copyright
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  * limitations under the License.
  */
 #endregion
-using System;
 using System.IO;
 using Microsoft.Office.Interop.Excel;
 using PdfSharp.Pdf;
@@ -25,21 +24,17 @@ namespace Cellmate
 {
     class PdfWorkbookCombiner : IWorkbookCombiner
     {
-        private const string PageNumberNotation = "&P";
-
         private readonly PdfDocument targetPdf;
-        private readonly PageNumberPosition pageNumberPosition;
-        private readonly Action<Worksheet> pageNumberingAction;
+        private readonly IPageNumberRenderer pageNumberRenderer;
         private readonly bool saveEach;
-        private int pageTotal;
+        private int totalPages;
 
-        public PdfWorkbookCombiner(PageNumberPosition pageNumberPosition, bool saveEach)
+        public PdfWorkbookCombiner(IPageNumberRenderer pageNumberRenderer, bool saveEach)
         {
             this.targetPdf = new PdfDocument();
-            this.pageNumberPosition = pageNumberPosition;
-            this.pageNumberingAction = GetPageNumberingAction(pageNumberPosition);
+            this.pageNumberRenderer = pageNumberRenderer;
             this.saveEach = saveEach;
-            this.pageTotal = 0;
+            this.totalPages = 0;
         }
 
         public string FormatName
@@ -49,8 +44,7 @@ namespace Cellmate
 
         public void Append(Workbook book)
         {
-            if (pageNumberPosition != PageNumberPosition.None)
-                InsertPageNumber(book);
+            pageNumberRenderer.RenderPageNumber(book, totalPages);
 
             string path = System.IO.Path.ChangeExtension(book.FullName, ".pdf");
             book.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, path);
@@ -79,24 +73,6 @@ namespace Cellmate
             this.targetPdf.Close();
         }
 
-        void InsertPageNumber(Workbook book)
-        {
-            bool firstPage = true;
-            
-            foreach (Worksheet sheet in book.Worksheets)
-            {
-                if (sheet.Visible == XlSheetVisibility.xlSheetVisible)
-                {
-                    if (firstPage)
-                    {
-                        sheet.PageSetup.FirstPageNumber = this.pageTotal + 1;
-                        firstPage = false;
-                    }
-                    this.pageNumberingAction.Invoke(sheet);
-                }
-            }
-        }
-
         void AppendPdf(string path)
         {
             using (PdfDocument pdf = PdfReader.Open(path, PdfDocumentOpenMode.Import))
@@ -105,22 +81,8 @@ namespace Cellmate
                 {
                     this.targetPdf.AddPage(page);
                 }
-                this.pageTotal += pdf.PageCount;
+                this.totalPages += pdf.PageCount;
             }
-        }
-
-        Action<Worksheet> GetPageNumberingAction(PageNumberPosition pageNumberPosition)
-        {
-            switch (pageNumberPosition)
-            {
-                case PageNumberPosition.Left:
-                    return sheet => sheet.PageSetup.LeftFooter = PageNumberNotation;
-                case PageNumberPosition.Center:
-                    return sheet => sheet.PageSetup.CenterFooter = PageNumberNotation;
-                case PageNumberPosition.Right:
-                    return sheet => sheet.PageSetup.RightFooter = PageNumberNotation;
-            }
-            return sheet => {};
         }
     }
 }

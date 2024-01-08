@@ -1,6 +1,6 @@
 #region copyright
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 #endregion
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
-using PdfSharp.Pdf;
-using PdfSharp.Pdf.IO;
 
 namespace Cellmate
 {
@@ -45,9 +43,17 @@ namespace Cellmate
         [Parameter()]
         public SwitchParameter SaveEach { get; set; }
 
+        [Parameter()]
+        public SwitchParameter RestartPageNumber { get; set; }
+
+        [Parameter()]
+        public string PageNumberFormat { get; set; } = "&P";
+
         protected override void BeginProcessing()
         {
-           this.combiner = new PdfWorkbookCombiner(PageNumber, SaveEach.IsPresent);
+            this.combiner = new PdfWorkbookCombiner(
+                CreatePageNumberRenderer(PageNumber, PageNumberFormat, RestartPageNumber.IsPresent),
+                SaveEach.IsPresent);
         }
 
         protected override void EndProcessing()
@@ -67,6 +73,21 @@ namespace Cellmate
         {
             WriteVerbose($"Appending a workbook: {book.FullName}");
             this.combiner.Append(book);
+        }
+
+        private static IPageNumberRenderer CreatePageNumberRenderer(
+            PageNumberPosition position, string format, bool restartPageNumber) {
+            if (position == PageNumberPosition.None) 
+            {
+                return new NoopPageRenderer();
+            } 
+            else if (restartPageNumber) 
+            {
+                return new SimplePageNumberRenderer(position, format);
+            } 
+            else {
+                return new ContinuousPageNumberRenderer(position, format);
+            }
         }
     }
 }
