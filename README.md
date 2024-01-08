@@ -3,9 +3,11 @@
 Cellmate is a collection of PowerShell cmdlets for processing Excel workbooks.
 
 ## Prerequisite
-* PowerShell 5.1 or higher
-* .NET Framework 4.7 or higher
+* Windows PowerShell 5.1
+* .NET Framework 4.8
 * Microsoft Excel
+
+Note that PowerShell 6 and .NET Core are not supported by this PowerShell module.
 
 ## How to Install
 
@@ -17,7 +19,7 @@ Cellmate is a collection of PowerShell cmdlets for processing Excel workbooks.
 
 This section shows PowerShell scripts as examples.
 
-#### Merging workbooks into a PDF file
+### Merging workbooks into a PDF file
 _merge-books.ps1_
 ```powershell
 Import-Module Cellmate
@@ -31,7 +33,7 @@ Get-Item $books |
     Out-Null
 ```
 
-#### Archiving workbooks into a ZIP file
+### Archiving workbooks into a ZIP file
 _archive-books.ps1_
 ```powershell
 Import-Module Cellmate
@@ -45,8 +47,17 @@ Get-Item $books |
     Out-Null
 ```
 
-## Copyright Notice
-Copyright 2020 the original author or authors. All rights reserved.
+## List of Cmdlets
+
+| Name | Description |
+| --- | --- |
+| Compress-Workbook | Creates a ZIP achive containing one or more workbooks . |
+| Export-Workbook | Saves a workbook into a file.  |
+| Import-Workbook | Loads a workbook from the specified path. |
+| Merge-Workbook | Merges one or more workbooks into a PDF file. |
+
+## Legal Notice
+Copyright 2020-2024 the original author or authors. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this product except in compliance with the License.

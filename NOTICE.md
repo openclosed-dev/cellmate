@@ -1,5 +1,5 @@
 # Cellmate
-Copyright 2020 the original author or authors. All rights reserved.
+Copyright 2020-2024 the original author or authors. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this product except in compliance with the License.
