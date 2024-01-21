@@ -59,6 +59,7 @@ Get-Item $books |
 | Export-Workbook | ワークブックをファイルに保存します。  |
 | Import-Workbook | 指定されたパスからワークブックを読み込みます。 |
 | Merge-Workbook | 1つ以上のワークブックを PDF ファイルに結合します。 |
+| Remove-HiddenWorksheet | 指定されたワークブック内のすべての非表示のワークシートを削除します。 |
 
 ## 法的通知
 Copyright 2020-2024 the original author or authors. All rights reserved.

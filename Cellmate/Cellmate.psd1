@@ -32,7 +32,7 @@ CmdletsToExport = @(
     'Import-Workbook',
     'Merge-BorderedWorksheetRange',
     'Merge-Workbook',
+    'Remove-HiddenWorksheet'
     'Test-DateCell'
 )
 }
-

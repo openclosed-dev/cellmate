@@ -59,6 +59,7 @@ Get-Item $books |
 | Export-Workbook | Saves a workbook into a file.  |
 | Import-Workbook | Loads a workbook from the specified path. |
 | Merge-Workbook | Merges one or more workbooks into a PDF file. |
+| Remove-HiddenWorksheet | Deletes all hidden worksheets in a given workbook. |
 
 ## Legal Notice
 Copyright 2020-2024 the original author or authors. All rights reserved.
