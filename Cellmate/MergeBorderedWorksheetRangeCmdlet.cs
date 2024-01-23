@@ -1,6 +1,6 @@
 #region copyright
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ namespace Cellmate
         public override string[] Range { get; set; }
 
         [Parameter(
-            HelpMessage = "Horizontal offset"
+            HelpMessage = "Column offset starting from zero"
         )]
         public int ColumnOffset { get; set; }
 
@@ -37,30 +37,36 @@ namespace Cellmate
 
         protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
         {
+            WriteVerbose($"Default worksheet range: {ToAddress(range)}");
             Range rangeToMerge = GetBorderedRange(range);
+            if (rangeToMerge == null)
+                return;
+
+            WriteVerbose($"Bordered worksheet range: {ToAddress(rangeToMerge)}");
             if (ColumnOffset > 0)
             {
                 rangeToMerge = GetSkippedRange(rangeToMerge, ColumnOffset);
+                if (rangeToMerge == null)
+                    return;
             }
-            var address = rangeToMerge.Address[false, false];
-            WriteVerbose($"Merging worsheet range: {address}");
+            WriteVerbose($"Merging worksheet range: {ToAddress(rangeToMerge)}");
             rangeToMerge.Merge();
         }
 
         private Range GetSkippedRange(Range range, int columnsToSkip)
         {
             Range topLeft = range.Cells[1, 1] as Range;
-            int columns = 0;
-            while (columns++ < columnsToSkip)
-            {
-                topLeft = topLeft.Offset[0, 1];
-            }
-            return range.Range[topLeft, range.Cells[range.Rows.Count, range.Columns.Count]];
+            Range moved = topLeft.Offset[0, columnsToSkip];
+
+            if (moved.Column > range.Columns.Count)
+                return null;
+
+            return range.Range[moved, range.Cells[range.Rows.Count, range.Columns.Count]];
         }
 
         private Range GetBorderedRange(Range range)
         {
-            int column = 1;
+            int column = 0;
             while (true)
             {
                 var cell = range.Cells[1, column + 1] as Range;
@@ -73,6 +79,10 @@ namespace Cellmate
                     break;
                 }
             }
+
+            if (column <= 0)
+                return null;
+
             return range.Range[range.Cells[1, 1], range.Cells[range.Rows.Count, column]];
         }
 
@@ -81,9 +91,14 @@ namespace Cellmate
             var border = cell.Borders[XlBordersIndex.xlEdgeTop];
             if (border.LineStyle is int i)
             {
-                return i != (int)(XlLineStyle.xlLineStyleNone);
+                return i != (int)XlLineStyle.xlLineStyleNone;
             }
             return false;
+        }
+
+        static string ToAddress(Range range)
+        {
+            return range.Address[false, false];
         }
     }
 }
