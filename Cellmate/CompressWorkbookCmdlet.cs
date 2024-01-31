@@ -83,7 +83,7 @@ namespace Cellmate
             var entryName = fullName.Substring(baseName.Length + 1);
             WriteVerbose($"Compressing a workbook {fullName} as {entryName}");
 
-            var entry = zipArchive.CreateEntry(book.Name);
+            var entry = zipArchive.CreateEntry(entryName);
             if (LastWriteTime.HasValue)
             {
                 entry.LastWriteTime = this.LastWriteTime.Value; 
