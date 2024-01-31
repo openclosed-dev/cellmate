@@ -20,6 +20,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Management.Automation;
 using Microsoft.Office.Interop.Excel;
+using System;
 
 namespace Cellmate
 {
@@ -46,6 +47,12 @@ namespace Cellmate
             }
         }
 
+        [Parameter()]
+        public FileMode FileMode { get; set; } = FileMode.Create;
+
+        [Parameter()]
+        public DateTimeOffset? LastWriteTime;
+
         public CompressWorkbookCmdlet()
         {
             this.entryEncoding = System.Text.Encoding.UTF8;
@@ -54,7 +61,7 @@ namespace Cellmate
         protected override void BeginProcessing()
         {
             string path = ResolvePath(Destination);
-            var zipStream = new FileStream(path, FileMode.OpenOrCreate);
+            var zipStream = new FileStream(path, this.FileMode);
             this.zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Update, false, entryEncoding);
         }
 
@@ -76,18 +83,44 @@ namespace Cellmate
             var entryName = fullName.Substring(baseName.Length + 1);
             WriteVerbose($"Compressing a workbook {fullName} as {entryName}");
 
-            var sourceFileName = SaveAsTemporaryFile(book);
-            try 
+            var entry = zipArchive.CreateEntry(book.Name);
+            if (LastWriteTime.HasValue)
             {
-                this.zipArchive.CreateEntryFromFile(sourceFileName, entryName); 
+                entry.LastWriteTime = this.LastWriteTime.Value; 
+            }
+            else
+            {
+                entry.LastWriteTime = GetLastSaveTime(book); 
+            }
+
+            AppendWorkbook(entry, book);
+        }
+
+        DateTime GetLastSaveTime(Workbook book)
+        {
+            return File.GetLastWriteTime(book.FullName);
+        }
+
+        void AppendWorkbook(ZipArchiveEntry entry, Workbook book)
+        {
+            string tempFileName = SaveWorkBookAsTemporaryFile(book);
+            try
+            {
+                using (Stream stream = entry.Open())
+                {
+                    using (var file = File.OpenRead(tempFileName))
+                    {
+                        file.CopyTo(stream);
+                    }
+                }
             }
             finally
             {
-                File.Delete(sourceFileName);
+                File.Delete(tempFileName);
             }
         }
 
-        string SaveAsTemporaryFile(Workbook book)
+        string SaveWorkBookAsTemporaryFile(Workbook book)
         {
             string filename = Path.GetTempFileName();
             book.SaveCopyAs(filename);
