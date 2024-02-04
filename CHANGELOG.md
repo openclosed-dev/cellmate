@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Added
+- `Compress-Workbook` cmdlet now receives the following parameters.
+    - `-FileMode` to specify the file mode of the archive file.
+      See https://learn.microsoft.com/en-us/dotnet/api/system.io.filemode?view=netframework-4.8.1
+    - `-LastWriteTime` to specify the date time of the archive entries.
+
+### Changed
+- `Compress-Workbook` cmdlet now creates a new archive file by default.
+  This behavior can be changed using `-FileMode` parameter.
+
 ## 0.9.0 - 2024-01-21
 
 ### Added
