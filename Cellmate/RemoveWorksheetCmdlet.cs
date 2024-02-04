@@ -21,7 +21,7 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsCommon.Remove, "Worksheet"), OutputType(typeof(Worksheet))]
+    [Cmdlet(VerbsCommon.Remove, "Worksheet"), OutputType(typeof(Workbook))]
     public class RemoveWorksheetCmdlet : WorksheetCmdlet
     {
         [Parameter(Mandatory = true)]
