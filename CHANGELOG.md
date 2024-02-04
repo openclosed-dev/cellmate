@@ -6,7 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 ### Added
-- `Compress-Workbook` cmdlet now receives the following parameters.
+- Added `Remove-Worksheet` cmdlet for deleting worksheets having the specified name.
+- `Compress-Workbook` cmdlet now receives the following new parameters.
     - `-FileMode` to specify the file mode of the archive file.
       See https://learn.microsoft.com/en-us/dotnet/api/system.io.filemode?view=netframework-4.8.1
     - `-LastWriteTime` to specify the date time of the archive entries.
