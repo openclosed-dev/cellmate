@@ -21,8 +21,8 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsCommon.Remove, "Worksheet"), OutputType(typeof(Workbook))]
-    public class RemoveWorksheetCmdlet : WorksheetCmdlet
+    [Cmdlet(VerbsCommon.Hide, "Worksheet"), OutputType(typeof(Workbook))]
+    public class HideWorksheetCmdlet : WorksheetCmdlet
     {
         [Parameter(Mandatory = true)]
         public string[] Name { get; set; }
@@ -35,8 +35,8 @@ namespace Cellmate
             {
                 if (sheetName == name)
                 {
-                    sheet.Delete();
-                    WriteWarning($"Removed a worksheet \"{sheetName}\" in {bookName}");
+                    sheet.Visible = XlSheetVisibility.xlSheetHidden;
+                    WriteWarning($"Hid a worksheet \"{sheetName}\" in {bookName}");
                 }
             }
         }

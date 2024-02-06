@@ -29,6 +29,7 @@ CmdletsToExport = @(
     'Compress-Workbook',
     'Edit-DateCell',
     'Export-Workbook',
+    'Hide-Worksheet',
     'Import-Workbook',
     'Merge-BorderedWorksheetRange',
     'Merge-Workbook',

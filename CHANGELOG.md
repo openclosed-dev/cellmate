@@ -5,9 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
+### Added
+- Added a new cmdlet `Hide-Worksheet` to hide worksheets having the specified name.
+
 ### Fixed
-- Fixed a bug in 'Compress-Workbook' cmdlet that produces broken paths for zip entries
-  when the input files exist outside of the current directory.
+- Fixed a bug in `Compress-Workbook` cmdlet that causes broken paths of zip entries
+  when the input files reside outside of the current directory.
+
+### Changed
+- `Remove-Worksheet` cmdlet now accepts multiple names with `-Name` parameter.
 
 ## 0.10.0 - 2024-02-04
 ### Added
