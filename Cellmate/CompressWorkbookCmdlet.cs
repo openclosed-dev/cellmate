@@ -80,7 +80,11 @@ namespace Cellmate
         {
             var fullName = book.FullName;
             var baseName = this.CurrentLocation;
-            var entryName = fullName.Substring(baseName.Length + 1);
+
+            string entryName = book.Name;
+            if (fullName.StartsWith(baseName))
+                entryName = fullName.Substring(baseName.Length + 1);
+
             WriteVerbose($"Compressing a workbook {fullName} as {entryName}");
 
             var entry = zipArchive.CreateEntry(entryName);
