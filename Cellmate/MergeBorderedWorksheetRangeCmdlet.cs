@@ -37,12 +37,10 @@ namespace Cellmate
 
         protected override void ProcessRange(Workbook book, Worksheet sheet, Range range)
         {
-            WriteVerbose($"Default worksheet range: {ToAddress(range)}");
             Range rangeToMerge = GetBorderedRange(range);
             if (rangeToMerge == null)
                 return;
 
-            WriteVerbose($"Bordered worksheet range: {ToAddress(rangeToMerge)}");
             if (ColumnOffset > 0)
             {
                 rangeToMerge = GetSkippedRange(rangeToMerge, ColumnOffset);
