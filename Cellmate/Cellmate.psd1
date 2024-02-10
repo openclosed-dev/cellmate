@@ -26,6 +26,7 @@ PowerShellVersion = '5.1'
 # Cmdlets to export from this module
 CmdletsToExport = @(
     'Clear-DateCell',
+    'Clear-Worksheet',
     'Compress-Workbook',
     'Edit-DateCell',
     'Export-Workbook',
