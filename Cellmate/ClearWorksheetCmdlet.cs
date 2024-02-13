@@ -33,10 +33,16 @@ namespace Cellmate
 
         protected override void ProcessSheet(Workbook book, Worksheet sheet)
         {
+            if (Area == Area.NonPrint)
+                ClearNonPrintArea(book, sheet);
+        }
+
+        private void ClearNonPrintArea(Workbook book, Worksheet sheet)
+        {
             var printArea = sheet.PageSetup.PrintArea;
             if (printArea != null && printArea != "")
             {
-                var outer = ComputeOuterRange(book, sheet, sheet.Range[printArea]);
+                var outer = ComputeOuterRange(sheet, sheet.Range[printArea]);
                 if (outer != null)
                 {
                     outer.Clear();
@@ -45,7 +51,7 @@ namespace Cellmate
             }
         }
 
-        private Range ComputeOuterRange(Workbook book, Worksheet sheet, Range inner)
+        private Range ComputeOuterRange(Worksheet sheet, Range inner)
         {
             Application app = sheet.Application;
 
@@ -56,11 +62,11 @@ namespace Cellmate
                 {
                     if (outer == null)
                         outer = cell;
-                    else 
+                    else
                         outer = app.Union(outer, cell);
                 }
             }
-            
+
             return outer;
         }
     }
