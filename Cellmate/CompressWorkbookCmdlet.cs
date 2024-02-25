@@ -1,6 +1,6 @@
 #region copyright
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,19 +24,20 @@ using System;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsData.Compress, "Workbook"),
-     OutputType(typeof(Workbook))]
+    [Cmdlet(VerbsData.Compress, "Workbook")]
+    [OutputType(typeof(Workbook))]
     public class CompressWorkbookCmdlet : WorkbookCmdlet
     {
         private Encoding entryEncoding;
         private ZipArchive zipArchive;
+        private bool enableMacro;
 
         [Parameter(Position = 0, Mandatory = true)]
         public string Destination { get; set; }
 
         [Parameter()]
         public string Encoding
-        { 
+        {
             get
             {
                 return entryEncoding.ToString();
@@ -53,9 +54,17 @@ namespace Cellmate
         [Parameter()]
         public DateTimeOffset? LastWriteTime;
 
+        [Parameter()]
+        public SwitchParameter DisableMacro
+        {
+            get { return !enableMacro; }
+            set { enableMacro = !value; }
+        }
+
         public CompressWorkbookCmdlet()
         {
             this.entryEncoding = System.Text.Encoding.UTF8;
+            this.enableMacro = true;
         }
 
         protected override void BeginProcessing()
@@ -85,29 +94,36 @@ namespace Cellmate
             if (fullName.StartsWith(baseName))
                 entryName = fullName.Substring(baseName.Length + 1);
 
+            var fileFormat = book.FileFormat;
+            if (!enableMacro && book.FileFormat == XlFileFormat.xlOpenXMLWorkbookMacroEnabled)
+            {
+                fileFormat = XlFileFormat.xlWorkbookDefault;
+                entryName = Path.ChangeExtension(entryName, ".xlsx");
+            }
+
             WriteVerbose($"Compressing a workbook {fullName} as {entryName}");
 
             var entry = zipArchive.CreateEntry(entryName);
             if (LastWriteTime.HasValue)
             {
-                entry.LastWriteTime = this.LastWriteTime.Value; 
+                entry.LastWriteTime = this.LastWriteTime.Value;
             }
             else
             {
-                entry.LastWriteTime = GetLastSaveTime(book); 
+                entry.LastWriteTime = GetLastSaveTime(book);
             }
 
-            AppendWorkbook(entry, book);
+            var tempFileName = SaveWorkBookAsTemporaryFile(book, fileFormat);
+            AppendWorkbook(entry, tempFileName);
         }
 
-        DateTime GetLastSaveTime(Workbook book)
+        private DateTime GetLastSaveTime(Workbook book)
         {
             return File.GetLastWriteTime(book.FullName);
         }
 
-        void AppendWorkbook(ZipArchiveEntry entry, Workbook book)
+        private void AppendWorkbook(ZipArchiveEntry entry, string tempFileName)
         {
-            string tempFileName = SaveWorkBookAsTemporaryFile(book);
             try
             {
                 using (Stream stream = entry.Open())
@@ -124,19 +140,36 @@ namespace Cellmate
             }
         }
 
-        string SaveWorkBookAsTemporaryFile(Workbook book)
+        private string SaveWorkBookAsTemporaryFile(Workbook book, XlFileFormat fileFormat)
         {
             string filename = Path.GetTempFileName();
             book.SaveCopyAs(filename);
+
+            if (book.FileFormat != fileFormat)
+                ConvertFileFormat(book.Application, filename, fileFormat);
+
             return filename;
         }
 
-        void CloseZip()
+        private void CloseZip()
         {
             if (zipArchive != null)
             {
                 zipArchive.Dispose();
                 zipArchive = null;
+            }
+        }
+
+        private void ConvertFileFormat(Application excel, string fullName, XlFileFormat fileFormat)
+        {
+            var book = excel.Workbooks.Open(fullName);
+            try
+            {
+                book.SaveAs(fullName, fileFormat);
+            }
+            finally
+            {
+                book.Close();
             }
         }
     }

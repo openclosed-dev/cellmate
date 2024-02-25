@@ -1,6 +1,6 @@
 #region copyright
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2020-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,72 +21,76 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Cellmate
 {
-    [Cmdlet(VerbsData.Export, "Workbook"),
-     OutputType(typeof(Workbook))]
+    [Cmdlet(VerbsData.Export, "Workbook")]
+    [OutputType(typeof(Workbook))]
     public class ExportWorkbookCmdlet : WorkbookCmdlet
     {
-        public enum OutputFormat 
+        public enum OutputFormat
         {
-            Default,
+            Default, // xlsx
             Csv,
             Pdf,
             Xps
         }
 
         [Parameter()]
-        public OutputFormat As { get; set; } = OutputFormat.Default;
+        public OutputFormat? As { get; set; }
 
         [Parameter(Position = 0)]
         public string Destination { get; set; }
-        
+
         protected override void ProcessBook(Workbook book)
         {
             SaveBook(book);
         }
 
-        void SaveBook(Workbook book)
+        private void SaveBook(Workbook book)
         {
             switch (As)
             {
                 case OutputFormat.Default:
                     SaveBookAs(book, XlFileFormat.xlWorkbookDefault, ".xlsx");
-                    break; 
+                    break;
                 case OutputFormat.Csv:
                     SaveBookAs(book, XlFileFormat.xlCSV, ".csv");
-                    break; 
+                    break;
                 case OutputFormat.Pdf:
                     ExportBookAs(book, XlFixedFormatType.xlTypePDF, ".pdf");
-                    break; 
+                    break;
                 case OutputFormat.Xps:
                     ExportBookAs(book, XlFixedFormatType.xlTypeXPS, ".xps");
-                    break; 
+                    break;
+                case null:
+                    // Saves as original format
+                    SaveBookAs(book, book.FileFormat, null);
+                    break;
             }
         }
 
-        void SaveBookAs(Workbook book, XlFileFormat format, string extension)
+        private void SaveBookAs(Workbook book, XlFileFormat format, string extension)
         {
             var filename = GetTargetName(book, extension);
             WriteVerbose($"Exporting a workbook: {filename}");
             book.SaveAs(filename, format, Local : true);
         }
 
-        void ExportBookAs(Workbook book, XlFixedFormatType format, string extension)
+        private void ExportBookAs(Workbook book, XlFixedFormatType format, string extension)
         {
             var filename = GetTargetName(book, extension);
             WriteVerbose($"Exporting a workbook: {filename}");
             book.ExportAsFixedFormat(format, filename);
         }
 
-        string GetTargetName(Workbook book, string extension)
+        private string GetTargetName(Workbook book, string extension)
         {
             string filename = book.FullName;
-            
+
             if (Destination != null)
                 filename = Path.Combine(ResolvePath(Destination), Path.GetFileName(filename));
-            
+
             if (extension != null)
-                filename = Path.ChangeExtension(filename, extension); 
-            
+                filename = Path.ChangeExtension(filename, extension);
+
             return filename;
         }
     }
