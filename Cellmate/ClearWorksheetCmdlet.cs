@@ -53,17 +53,26 @@ namespace Cellmate
 
         private Range ComputeOuterRange(Worksheet sheet, Range inner)
         {
-            Application app = sheet.Application;
+            var used = sheet.UsedRange;
+
+            int innerRowCount = inner.Rows.Count;
+            int innerColumnCount = inner.Columns.Count;
+            int usedRowCount = used.Rows.Count;
+            int usedColumnCount = used.Columns.Count;
 
             Range outer = null;
-            foreach (Range cell in sheet.UsedRange)
-            {
-                if (app.Intersect(cell, inner) == null)
-                {
-                    if (outer == null)
-                        outer = cell;
-                    else
-                        outer = app.Union(outer, cell);
+            var lastUsedCell = used.Cells[usedRowCount, usedColumnCount];
+
+            if (innerColumnCount < usedColumnCount) {
+                outer = used.Range[used.Cells[1, innerColumnCount + 1], lastUsedCell];
+            }
+
+            if (innerRowCount < usedRowCount) {
+                var bottom = used.Range[used.Cells[innerRowCount + 1, 1], lastUsedCell];
+                if (outer == null) {
+                    outer = bottom;
+                } else {
+                    outer = sheet.Application.Union(outer, bottom);
                 }
             }
 
