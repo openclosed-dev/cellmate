@@ -46,7 +46,7 @@ namespace Cellmate
                 if (outer != null)
                 {
                     outer.Clear();
-                    WriteVerbose($"Cleared non-print areas: {outer.Address}");
+                    WriteVerbose($"Cleared non-print areas: {outer.Address} on sheet {sheet.Name}");
                 }
             }
         }
