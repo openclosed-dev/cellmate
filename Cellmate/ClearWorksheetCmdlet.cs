@@ -39,10 +39,14 @@ namespace Cellmate
 
         private void ClearNonPrintArea(Workbook book, Worksheet sheet)
         {
-            var printArea = sheet.PageSetup.PrintArea;
+            string printArea = sheet.PageSetup.PrintArea;
             if (printArea != null && printArea != "")
             {
-                var outer = ComputeOuterRange(sheet, sheet.Range[printArea]);
+                // Converts the value in R1C1 style to A1 style.
+                if (book.Application.ReferenceStyle == XlReferenceStyle.xlR1C1)
+                    printArea = book.Application.ConvertFormula(printArea, XlReferenceStyle.xlR1C1, XlReferenceStyle.xlA1) as string;
+                var printRange = sheet.Range[printArea];
+                var outer = ComputeOuterRange(sheet, printRange);
                 if (outer != null)
                 {
                     WriteVerbose($"Clearing non-print areas: {outer.Address} on sheet {sheet.Name}");
