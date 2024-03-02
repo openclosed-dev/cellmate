@@ -8,7 +8,7 @@
 RootModule = '.\Cellmate.dll'
 
 # Version number of this module.
-ModuleVersion = '0.14.0'
+ModuleVersion = '0.15.0'
 
 # ID used to uniquely identify this module
 GUID = 'c04e8722-3530-4700-ba8c-03123835738f'
