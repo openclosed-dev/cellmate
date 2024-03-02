@@ -45,9 +45,9 @@ namespace Cellmate
                 var outer = ComputeOuterRange(sheet, sheet.Range[printArea]);
                 if (outer != null)
                 {
+                    WriteVerbose($"Clearing non-print areas: {outer.Address} on sheet {sheet.Name}");
                     outer.UnMerge();
                     outer.Clear();
-                    WriteVerbose($"Cleared non-print areas: {outer.Address} on sheet {sheet.Name}");
                 }
             }
         }

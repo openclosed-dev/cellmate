@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Fixed
+* Fixed a bug that caused `Clear-Worksheet` to fail to clear cells.
+
 ## 0.13.0 - 2024-02-27
 ### Changed
 * Improved the performance of `Clear-Worksheet` cmdlet.
